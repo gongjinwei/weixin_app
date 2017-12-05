@@ -59,6 +59,59 @@ class SmallAppMenuStyle(models.Model):
         return self.name
 
 
+class Companys(models.Model):
+    code = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+    shorthand = models.CharField(max_length=10, blank=True, null=True)
+    url = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Companys'
+
+
+class Usersmallappreportmenudata(models.Model):
+    id = models.IntegerField(primary_key=True)
+    menu_id = models.IntegerField()
+    name = models.CharField(max_length=100, blank=True, null=True)
+    data = JSONField()
+    update_number = models.IntegerField()
+    create_timestamp = models.DateTimeField()
+    update_timestamp = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'UserSmallAppReportMenuData'
+
+
+class Usersmallappreportmenurelation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    report_menu_id = models.IntegerField()
+    report_menu_data_id = models.IntegerField()
+    date = models.DateTimeField()
+    date_type = models.CharField(max_length=2)
+
+    class Meta:
+        managed = False
+        db_table = 'UserSmallAppReportMenuRelation'
+
+
+class Usersmallappreportmenus(models.Model):
+    company_id = models.IntegerField()
+    user_id = models.IntegerField()
+    style_id = models.IntegerField()
+    name = models.CharField(max_length=100)
+    is_top = models.IntegerField()
+    is_display = models.IntegerField()
+    is_remind = models.IntegerField()
+    update_number = models.IntegerField()
+    create_timestamp = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'UserSmallAppReportMenus'
+
+
 
 
 
