@@ -1,0 +1,7 @@
+/.idea/
+/venv/
+/test.txt
+/.svn/
+__pycache__/
+/media/
+migrations/
