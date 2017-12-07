@@ -2269,7 +2269,7 @@ class Printtemplate(models.Model):
 
 class Purchase(models.Model):
     purchaseid = models.IntegerField(db_column='PurchaseID', primary_key=True)  # Field name made lowercase.
-    shopid = models.IntegerField(db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
+    shopid = models.ForeignKey(to='Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     operatorid = models.IntegerField(db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
     checkorid = models.IntegerField(db_column='CheckorID', blank=True, null=True)  # Field name made lowercase.
     editorid = models.IntegerField(db_column='EditorID', blank=True, null=True)  # Field name made lowercase.

@@ -39,5 +39,10 @@ class ShopViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ShopSerializer
 
 
+class SaleorderViewSet(viewsets.ModelViewSet):
+    queryset = models.Saleorder.objects.all()
+    serializer_class = serializers.SaleorderSerializer
+
+
 
 

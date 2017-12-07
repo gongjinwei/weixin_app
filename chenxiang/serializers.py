@@ -45,3 +45,10 @@ class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model =models.Shop
         fields='__all__'
+
+
+class SaleorderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Saleorder
+        fields='__all__'
