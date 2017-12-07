@@ -650,7 +650,7 @@ class Datetype(models.Model):
 
 class Delivery(models.Model):
     deliveryid = models.IntegerField(db_column='DeliveryID', primary_key=True)  # Field name made lowercase.
-    shopid = models.IntegerField(db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
+    shopid = models.ForeignKey('Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     operatorid = models.IntegerField(db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
     checkorid = models.IntegerField(db_column='CheckorID', blank=True, null=True)  # Field name made lowercase.
     recheckid = models.IntegerField(db_column='ReCheckID', blank=True, null=True)  # Field name made lowercase.
@@ -679,7 +679,7 @@ class Delivery(models.Model):
 
 class Deliverydtl(models.Model):
     deliverydtlid = models.AutoField(db_column='DeliveryDtlID', primary_key=True)  # Field name made lowercase.
-    deliveryid = models.IntegerField(db_column='DeliveryID', blank=True, null=True)  # Field name made lowercase.
+    deliveryid = models.ForeignKey('Delivery',db_column='DeliveryID', blank=True, null=True)  # Field name made lowercase.
     codeinput = models.CharField(db_column='CodeInput', max_length=50, blank=True, null=True)  # Field name made lowercase.
     saleid = models.IntegerField(db_column='SaleID', blank=True, null=True)  # Field name made lowercase.
     pcs = models.FloatField(db_column='Pcs', blank=True, null=True)  # Field name made lowercase.
@@ -3707,6 +3707,9 @@ class Shop(models.Model):
     class Meta:
         managed = False
         db_table = 'Shop'
+
+    def __str__(self):
+        return self.name
 
 
 class Store(models.Model):

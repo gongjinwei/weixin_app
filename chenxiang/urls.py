@@ -9,5 +9,6 @@ router.register(r'client', views.ClientViewSet)
 router.register(r'goods', views.GoodsViewSet)
 router.register(r'purchase', views.PurchaseViewSet)
 router.register(r'shop', views.ShopViewSet)
-router.register(r'saleorder', views.SaleorderViewSet)
+router.register(r'delivery', views.DeliveryViewSet)
+router.register(r'deliverydtl', views.DeliverydtlViewSet)
 urlpatterns = router.urls

@@ -47,8 +47,15 @@ class ShopSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 
-class SaleorderSerializer(serializers.ModelSerializer):
+class DeliverySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model =models.Saleorder
+        model =models.Delivery
+        fields='__all__'
+
+
+class DeliverydtlSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Deliverydtl
         fields='__all__'
