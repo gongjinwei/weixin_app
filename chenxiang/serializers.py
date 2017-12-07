@@ -17,3 +17,17 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model =models.Client
         fields='__all__'
+
+
+class GoodsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Goods
+        fields='__all__'
+
+
+class SaledtlSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Saledtl
+        fields='__all__'

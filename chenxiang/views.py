@@ -19,5 +19,15 @@ class ClientViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ClientSerializer
 
 
+class GoodsViewSet(viewsets.ModelViewSet):
+    queryset = models.Goods.objects.all()
+    serializer_class = serializers.GoodsSerializer
+
+
+class SaledtlViewSet(viewsets.ModelViewSet):
+    queryset = models.Saledtl.objects.all()
+    serializer_class = serializers.SaledtlSerializer
+
+
 
 

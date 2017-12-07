@@ -965,7 +965,7 @@ class Goods(models.Model):
     websn = models.IntegerField(db_column='WebSn', blank=True, null=True)  # Field name made lowercase.
     goodskindid = models.IntegerField(db_column='GoodsKindID', blank=True, null=True)  # Field name made lowercase.
     goodscostingid = models.IntegerField(db_column='GoodsCostingID', blank=True, null=True)  # Field name made lowercase.
-    clientid = models.IntegerField(db_column='ClientID', blank=True, null=True)  # Field name made lowercase.
+    clientid = models.ForeignKey(to='Client',db_column='ClientID', blank=True, null=True)  # Field name made lowercase.
     vendorid = models.IntegerField(db_column='VendorID', blank=True, null=True)  # Field name made lowercase.
     storeid = models.IntegerField(db_column='StoreID', blank=True, null=True)  # Field name made lowercase.
     code = models.CharField(db_column='Code', max_length=50)  # Field name made lowercase.
@@ -1007,6 +1007,9 @@ class Goods(models.Model):
     class Meta:
         managed = False
         db_table = 'Goods'
+
+    def __str__(self):
+        return self.name
 
 
 class Goodsclose(models.Model):
@@ -3260,8 +3263,8 @@ class Sale(models.Model):
 class Saledtl(models.Model):
     saledtlid = models.AutoField(db_column='SaleDtlID', primary_key=True)  # Field name made lowercase.
     itemno = models.IntegerField(db_column='ItemNo', blank=True, null=True)  # Field name made lowercase.
-    saleid = models.IntegerField(db_column='SaleID')  # Field name made lowercase.
-    goodsid = models.IntegerField(db_column='GoodsID', blank=True, null=True)  # Field name made lowercase.
+    saleid = models.ForeignKey(to='Sale',db_column='SaleID')  # Field name made lowercase.
+    goodsid = models.ForeignKey(to='Goods',db_column='GoodsID', blank=True, null=True)  # Field name made lowercase.
     goodsunitid = models.IntegerField(db_column='GoodsUnitID', blank=True, null=True)  # Field name made lowercase.
     aprice = models.FloatField(db_column='APrice', blank=True, null=True)  # Field name made lowercase.
     price = models.FloatField(db_column='Price', blank=True, null=True)  # Field name made lowercase.
