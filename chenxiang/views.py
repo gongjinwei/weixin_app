@@ -29,5 +29,15 @@ class SaledtlViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SaledtlSerializer
 
 
+class PurchaseViewSet(viewsets.ModelViewSet):
+    queryset = models.Purchase.objects.all()
+    serializer_class = serializers.PurchaseSerializer
+
+
+class ShopViewSet(viewsets.ModelViewSet):
+    queryset = models.Shop.objects.all()
+    serializer_class = serializers.ShopSerializer
+
+
 
 

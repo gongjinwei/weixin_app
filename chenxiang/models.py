@@ -3259,6 +3259,9 @@ class Sale(models.Model):
         managed = False
         db_table = 'Sale'
 
+    def __str__(self):
+        return str(self.saleid)
+
 
 class Saledtl(models.Model):
     saledtlid = models.AutoField(db_column='SaleDtlID', primary_key=True)  # Field name made lowercase.

@@ -31,3 +31,17 @@ class SaledtlSerializer(serializers.ModelSerializer):
     class Meta:
         model =models.Saledtl
         fields='__all__'
+
+
+class PurchaseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Purchase
+        fields='__all__'
+
+
+class ShopSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Shop
+        fields='__all__'

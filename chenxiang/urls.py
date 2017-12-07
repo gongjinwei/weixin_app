@@ -7,4 +7,6 @@ router.register(r'sale', views.SaleViewSet)
 router.register(r'saledtl', views.SaledtlViewSet)
 router.register(r'client', views.ClientViewSet)
 router.register(r'goods', views.GoodsViewSet)
+router.register(r'purchase', views.PurchaseViewSet)
+router.register(r'shop', views.ShopViewSet)
 urlpatterns = router.urls
