@@ -33,13 +33,12 @@ def get_latest_record(dirs):
                     cache.set(cls._meta.label, obj1, timeout=60 * 60 * 24)
                     obj2 = cls.objects.latest('editdate')
                     menu=UserSmallAppMenus.objects.get(company_api_name=obj2._meta.label)
-                    menu.value_formula = get_value(obj2,menu.value)
-                    menu.subvalue_formula = get_value(obj2,menu.subvalue)
-                    menu.subtitle_formula = get_value(obj2,menu.subtitle)
+                    menu.value = get_value(obj2,menu.value_formula)
+                    menu.subvalue = get_value(obj2,menu.value_formula)
+                    menu.subtitle = get_value(obj2,menu.value_formula)
                     menu.save()
 
                 except ObjectDoesNotExist:
                     continue
-
 
 get_latest_record(dir(models))
