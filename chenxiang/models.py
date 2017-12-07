@@ -345,7 +345,7 @@ class Chajia(models.Model):
     invalidid = models.IntegerField(db_column='InvalidID', blank=True, null=True)  # Field name made lowercase.
     deptid = models.IntegerField(db_column='DeptID', blank=True, null=True)  # Field name made lowercase.
     empid = models.IntegerField(db_column='EmpID', blank=True, null=True)  # Field name made lowercase.
-    clientid = models.IntegerField(db_column='ClientID', blank=True, null=True)  # Field name made lowercase.
+    clientid = models.ForeignKey('Client',db_column='ClientID',null=True,blank=True)  # Field name made lowercase.
     clienttypeid = models.IntegerField(db_column='ClientTypeID', blank=True, null=True)  # Field name made lowercase.
     printstyleid = models.IntegerField(db_column='PrintStyleID', blank=True, null=True)  # Field name made lowercase.
     printtimes = models.IntegerField(db_column='PrintTimes', blank=True, null=True)  # Field name made lowercase.
@@ -3213,7 +3213,7 @@ class Sale(models.Model):
     deptid = models.IntegerField(db_column='DeptID', blank=True, null=True)  # Field name made lowercase.
     empid = models.IntegerField(db_column='EmpID', blank=True, null=True)  # Field name made lowercase.
     salesmanid = models.IntegerField(db_column='SalesManID', blank=True, null=True)  # Field name made lowercase.
-    clientid = models.IntegerField(db_column='ClientID')  # Field name made lowercase.
+    clientid = models.ForeignKey(db_column='ClientID',to='Client')  # Field name made lowercase.
     bankid = models.IntegerField(db_column='BankID', blank=True, null=True)  # Field name made lowercase.
     storeid = models.IntegerField(db_column='StoreID', blank=True, null=True)  # Field name made lowercase.
     printstyleid = models.IntegerField(db_column='PrintStyleID', blank=True, null=True)  # Field name made lowercase.

@@ -9,8 +9,6 @@ from . import models,serializers
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from collections import OrderedDict
-
 
 class UserSmallAppMenusViewsets(viewsets.ModelViewSet):
     queryset = models.UserSmallAppMenus.objects.all()
@@ -22,6 +20,7 @@ class UserSmallAppMenusViewsets(viewsets.ModelViewSet):
 class SmallAppMenuStyleViewsets(viewsets.ModelViewSet):
     queryset = models.SmallAppMenuStyle.objects.all()
     serializer_class = serializers.SmallAppMenuStyleSerializer
+
 
 
 

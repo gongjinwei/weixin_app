@@ -21,8 +21,8 @@ class UserSmallAppMenus(AL_Node):
     style = models.ForeignKey('SmallAppMenuStyle')
     title = models.CharField(max_length=20)
     subtitle = models.CharField(max_length=50)
-    value = models.FloatField()
-    subvalue = models.FloatField()
+    value = models.CharField(max_length=50)
+    subvalue = models.CharField(max_length=50)
     image = models.CharField(max_length=100)
     icon = models.CharField(max_length=20)
     icon_background = models.CharField(max_length=6)
@@ -36,8 +36,11 @@ class UserSmallAppMenus(AL_Node):
                                related_name='children_set',
                                null=True,
                                db_index=True)
-    data = JSONField()
     sib_order = models.PositiveIntegerField()
+    value_formula = models.CharField(max_length=100)
+    subvalue_formula = models.CharField(max_length=100)
+    subtitle_formula = models.CharField(max_length=100)
+
 
     class Meta:
         managed = False
@@ -72,7 +75,7 @@ class Companys(models.Model):
 
 class Usersmallappreportmenudata(models.Model):
     id = models.IntegerField(primary_key=True)
-    menu_id = models.IntegerField()
+    report_menu = models.ManyToManyField('Usersmallappreportmenus')
     name = models.CharField(max_length=100, blank=True, null=True)
     data = JSONField()
     update_number = models.IntegerField()
@@ -80,14 +83,14 @@ class Usersmallappreportmenudata(models.Model):
     update_timestamp = models.DateTimeField()
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'UserSmallAppReportMenuData'
 
 
 class Usersmallappreportmenurelation(models.Model):
     id = models.IntegerField(primary_key=True)
-    report_menu_id = models.IntegerField()
-    report_menu_data_id = models.IntegerField()
+    report_menu = models.IntegerField()
+    report_menu_data= models.IntegerField()
     date = models.DateTimeField()
     date_type = models.CharField(max_length=2)
 
@@ -108,7 +111,7 @@ class Usersmallappreportmenus(models.Model):
     create_timestamp = models.DateTimeField()
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'UserSmallAppReportMenus'
 
 

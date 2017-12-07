@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'chenxiang',
     'menu',
     'treebeard',
-    'django_filters'
+    'django_filters',
+    'django_redis'
 ]
 
 MIDDLEWARE = [
@@ -141,8 +142,20 @@ STATIC_ROOT= os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file
 REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20,
+    'PAGE_SIZE': 10,
     'DEFAULT_METADATA_CLASS':'menu.metadata.SimpleMetadata',
+    'max_page_size':100,
 }
 
 DATABASE_ROUTERS = ['menu.routers.Router']
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
