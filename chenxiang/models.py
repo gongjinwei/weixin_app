@@ -549,6 +549,9 @@ class Client(models.Model):
         managed = False
         db_table = 'Client'
 
+    def __str__(self):
+        return self.name
+
 
 class Clientlev(models.Model):
     clientlevid = models.IntegerField(db_column='ClientLevID', primary_key=True)  # Field name made lowercase.

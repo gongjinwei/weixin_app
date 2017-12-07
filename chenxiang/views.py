@@ -14,5 +14,10 @@ class SaleViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SaleSerializer
 
 
+class ClientViewSet(viewsets.ModelViewSet):
+    queryset = models.Client.objects.all()
+    serializer_class = serializers.ClientSerializer
+
+
 
 

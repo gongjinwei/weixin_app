@@ -6,6 +6,14 @@ from . import models
 
 class SaleSerializer(serializers.ModelSerializer):
 
+
     class Meta:
         model =models.Sale
+        fields='__all__'
+
+
+class ClientSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Client
         fields='__all__'
