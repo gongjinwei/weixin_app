@@ -496,8 +496,8 @@ class Chargeofftype(models.Model):
 
 
 class Client(models.Model):
-    clientid = models.IntegerField(db_column='ClientID', primary_key=True)  # Field name made lowercase.
-    shopid = models.IntegerField(db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
+    clientid = models.AutoField(db_column='ClientID', primary_key=True)  # Field name made lowercase.
+    shopid = models.ForeignKey('Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     areaid = models.IntegerField(db_column='AreaID', blank=True, null=True)  # Field name made lowercase.
     zoneid = models.IntegerField(db_column='ZoneID', blank=True, null=True)  # Field name made lowercase.
     lineid = models.IntegerField(db_column='LineID', blank=True, null=True)  # Field name made lowercase.
@@ -649,7 +649,7 @@ class Datetype(models.Model):
 
 
 class Delivery(models.Model):
-    deliveryid = models.IntegerField(db_column='DeliveryID', primary_key=True)  # Field name made lowercase.
+    deliveryid = models.AutoField(db_column='DeliveryID', primary_key=True)  # Field name made lowercase.
     shopid = models.ForeignKey('Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     operatorid = models.IntegerField(db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
     checkorid = models.IntegerField(db_column='CheckorID', blank=True, null=True)  # Field name made lowercase.
@@ -675,6 +675,9 @@ class Delivery(models.Model):
     class Meta:
         managed = False
         db_table = 'Delivery'
+
+    def __str__(self):
+        return str(self.deliveryid)
 
 
 class Deliverydtl(models.Model):
@@ -958,7 +961,7 @@ class Forms(models.Model):
 
 
 class Goods(models.Model):
-    goodsid = models.IntegerField(db_column='GoodsID', primary_key=True)  # Field name made lowercase.
+    goodsid = models.AutoField(db_column='GoodsID', primary_key=True)  # Field name made lowercase.
     goodstypeid = models.IntegerField(db_column='GoodsTypeID', blank=True, null=True)  # Field name made lowercase.
     goodsseriesid = models.IntegerField(db_column='GoodsSeriesID', blank=True, null=True)  # Field name made lowercase.
     webclassid = models.IntegerField(db_column='WebClassID', blank=True, null=True)  # Field name made lowercase.
@@ -2268,7 +2271,7 @@ class Printtemplate(models.Model):
 
 
 class Purchase(models.Model):
-    purchaseid = models.IntegerField(db_column='PurchaseID', primary_key=True)  # Field name made lowercase.
+    purchaseid = models.AutoField(db_column='PurchaseID', primary_key=True)  # Field name made lowercase.
     shopid = models.ForeignKey(to='Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     operatorid = models.IntegerField(db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
     checkorid = models.IntegerField(db_column='CheckorID', blank=True, null=True)  # Field name made lowercase.
@@ -3195,8 +3198,8 @@ class Salary(models.Model):
 
 
 class Sale(models.Model):
-    saleid = models.IntegerField(db_column='SaleID', primary_key=True)  # Field name made lowercase.
-    shopid = models.IntegerField(db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
+    saleid = models.AutoField(db_column='SaleID', primary_key=True)  # Field name made lowercase.
+    shopid = models.ForeignKey('Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     operatorid = models.IntegerField(db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
     checkorid = models.IntegerField(db_column='CheckorID', blank=True, null=True)  # Field name made lowercase.
     editorid = models.IntegerField(db_column='EditorID', blank=True, null=True)  # Field name made lowercase.
@@ -3692,7 +3695,7 @@ class Sex(models.Model):
 
 
 class Shop(models.Model):
-    shopid = models.IntegerField(db_column='ShopID', primary_key=True)  # Field name made lowercase.
+    shopid = models.AutoField(db_column='ShopID', primary_key=True)  # Field name made lowercase.
     code = models.CharField(db_column='Code', max_length=50, blank=True, null=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100, blank=True, null=True)  # Field name made lowercase.
     legalrep = models.CharField(db_column='LegalRep', max_length=100, blank=True, null=True)  # Field name made lowercase.
