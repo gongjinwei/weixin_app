@@ -49,5 +49,10 @@ class DeliverydtlViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.DeliverydtlSerializer
 
 
+class OperatorViewSet(viewsets.ModelViewSet):
+    queryset = models.Operator.objects.all()
+    serializer_class = serializers.OperatorSerializer
+
+
 
 

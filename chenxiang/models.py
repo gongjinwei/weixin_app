@@ -1926,7 +1926,7 @@ class Onhand(models.Model):
 
 class Operator(models.Model):
     operatorid = models.AutoField(db_column='OperatorID', primary_key=True)  # Field name made lowercase.
-    shopid = models.IntegerField(db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
+    shopid = models.ForeignKey('Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     parentid = models.IntegerField(db_column='ParentID', blank=True, null=True)  # Field name made lowercase.
     isoperator = models.IntegerField(db_column='isOperator', blank=True, null=True)  # Field name made lowercase.
@@ -1946,6 +1946,9 @@ class Operator(models.Model):
     class Meta:
         managed = False
         db_table = 'Operator'
+
+    def __str__(self):
+        return self.name
 
 
 class Operatordept(models.Model):
@@ -3199,14 +3202,14 @@ class Salary(models.Model):
 
 class Sale(models.Model):
     saleid = models.AutoField(db_column='SaleID', primary_key=True)  # Field name made lowercase.
-    shopid = models.ForeignKey('Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
-    operatorid = models.IntegerField(db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
-    checkorid = models.IntegerField(db_column='CheckorID', blank=True, null=True)  # Field name made lowercase.
-    editorid = models.IntegerField(db_column='EditorID', blank=True, null=True)  # Field name made lowercase.
-    recheckid = models.IntegerField(db_column='ReCheckID', blank=True, null=True)  # Field name made lowercase.
-    invalidid = models.IntegerField(db_column='InvalidID', blank=True, null=True)  # Field name made lowercase.
+    shop = models.ForeignKey('Shop',db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
+    operator = models.ForeignKey('Operator',db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
+    checkor = models.ForeignKey('Emp',db_column='CheckorID', blank=True, null=True,related_name='checkor')  # Field name made lowercase.
+    editor = models.ForeignKey('Emp',db_column='EditorID', blank=True, null=True,related_name='editor')  # Field name made lowercase.
+    recheck = models.ForeignKey('Emp',db_column='ReCheckID', blank=True, null=True,related_name='recheck')  # Field name made lowercase.
+    invalid = models.IntegerField(db_column='InvalidID', blank=True, null=True)  # Field name made lowercase.
     deptid = models.IntegerField(db_column='DeptID', blank=True, null=True)  # Field name made lowercase.
-    empid = models.IntegerField(db_column='EmpID', blank=True, null=True)  # Field name made lowercase.
+    emp = models.ForeignKey('Emp',db_column='EmpID', blank=True, null=True,related_name='emp')  # Field name made lowercase.
     salesmanid = models.IntegerField(db_column='SalesManID', blank=True, null=True)  # Field name made lowercase.
     clientid = models.ForeignKey(db_column='ClientID',to='Client')  # Field name made lowercase.
     bankid = models.IntegerField(db_column='BankID', blank=True, null=True)  # Field name made lowercase.
@@ -3269,8 +3272,8 @@ class Sale(models.Model):
 class Saledtl(models.Model):
     saledtlid = models.AutoField(db_column='SaleDtlID', primary_key=True)  # Field name made lowercase.
     itemno = models.IntegerField(db_column='ItemNo', blank=True, null=True)  # Field name made lowercase.
-    saleid = models.ForeignKey(to='Sale',db_column='SaleID')  # Field name made lowercase.
-    goodsid = models.ForeignKey(to='Goods',db_column='GoodsID', blank=True, null=True)  # Field name made lowercase.
+    saleid = models.ForeignKey(to='Sale',db_column='SaleID',related_name='details')  # Field name made lowercase.
+    goods = models.ForeignKey(to='Goods',db_column='GoodsID', blank=True, null=True)  # Field name made lowercase.
     goodsunitid = models.IntegerField(db_column='GoodsUnitID', blank=True, null=True)  # Field name made lowercase.
     aprice = models.FloatField(db_column='APrice', blank=True, null=True)  # Field name made lowercase.
     price = models.FloatField(db_column='Price', blank=True, null=True)  # Field name made lowercase.
@@ -3745,7 +3748,7 @@ class Subreport(models.Model):
 
 
 class Tsum(models.Model):
-    tsumid = models.IntegerField(db_column='TSumID', primary_key=True)  # Field name made lowercase.
+    tsumid = models.AutoField(db_column='TSumID', primary_key=True)  # Field name made lowercase.
     shopid = models.IntegerField(db_column='ShopID', blank=True, null=True)  # Field name made lowercase.
     operatorid = models.IntegerField(db_column='OperatorID', blank=True, null=True)  # Field name made lowercase.
     checkorid = models.IntegerField(db_column='CheckorID', blank=True, null=True)  # Field name made lowercase.

@@ -142,9 +142,9 @@ STATIC_ROOT= os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file
 REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 1,
     'DEFAULT_METADATA_CLASS':'menu.metadata.SimpleMetadata',
-    'max_page_size':100,
+    'max_page_size':5,
 }
 
 DATABASE_ROUTERS = ['menu.routers.Router']

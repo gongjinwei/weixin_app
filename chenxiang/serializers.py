@@ -4,13 +4,17 @@ from rest_framework import serializers
 from . import models
 
 
-class SaleSerializer(serializers.ModelSerializer):
-
+class ShopSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model =models.Sale
+        model =models.Shop
         fields='__all__'
 
+class OperatorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =models.Operator
+        fields='__all__'
 
 class ClientSerializer(serializers.ModelSerializer):
 
@@ -27,9 +31,20 @@ class GoodsSerializer(serializers.ModelSerializer):
 
 
 class SaledtlSerializer(serializers.ModelSerializer):
+    goods=GoodsSerializer(read_only=True)
 
     class Meta:
         model =models.Saledtl
+        fields='__all__'
+
+
+class SaleSerializer(serializers.ModelSerializer):
+    shop=ShopSerializer(read_only=True)
+    operator=OperatorSerializer(read_only=True)
+    details = SaledtlSerializer(many=True,read_only=True)
+
+    class Meta:
+        model =models.Sale
         fields='__all__'
 
 
@@ -37,13 +52,6 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model =models.Purchase
-        fields='__all__'
-
-
-class ShopSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model =models.Shop
         fields='__all__'
 
 

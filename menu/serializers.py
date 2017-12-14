@@ -17,7 +17,9 @@ class UserSmallAppMenusSerializer(serializers.ModelSerializer):
         record=cache.get(obj.company_api_name)
         return record
 
+
 class SmallAppMenuStyleSerializer(serializers.ModelSerializer):
+    script = serializers.JSONField()
 
     class Meta:
         model = models.SmallAppMenuStyle
