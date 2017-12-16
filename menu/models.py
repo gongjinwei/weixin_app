@@ -171,8 +171,9 @@ class Aggregate(models.Model):
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     measure = models.ForeignKey('Measure', related_name='aggregates',null=True)
     cube = models.ForeignKey('Cube', related_name='aggregates')
-    function = models.CharField(choices=(('count', '计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大')),
-                                help_text='汇聚方法', max_length=10)
+    function = models.CharField(choices=(('count', '计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大'),('avg','求平均')),
+                                help_text='汇聚方法', max_length=10,null=True)
+    expressions = models.CharField(max_length=255,null=True,help_text='计算表达式，如:sum(measure)')
 
     def __str__(self):
         return self.name

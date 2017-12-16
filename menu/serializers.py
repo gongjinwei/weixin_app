@@ -124,7 +124,7 @@ class DimensionSerializer(NotNullSerializer):
 
 class CubeSerializer(NotNullSerializer):
     dimensions = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Dimension.objects.all())
-    measures = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Measure.objects.all())
+    measures = serializers.SlugRelatedField(slug_field='name', many=True,read_only=True)
     model = serializers.SlugRelatedField(slug_field='name', queryset=models.CubesModel.objects.all(), write_only=True)
     aggregates = AggregateSerializer(many=True, read_only=True)
     mappings = serializers.JSONField(allow_null=True,help_text='对应关系（可选）')
