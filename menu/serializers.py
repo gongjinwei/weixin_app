@@ -30,7 +30,8 @@ class NotNullSerializer(serializers.ModelSerializer):
             # resolve the pk value.
             check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
             if check_for_none is not None:
-                ret[field.field_name] = field.to_representation(attribute)
+                if field.to_representation(attribute):
+                    ret[field.field_name] = field.to_representation(attribute)
 
         return ret
 
@@ -59,73 +60,85 @@ class SmallAppMenuStyleSerializer(serializers.ModelSerializer):
 class MeasureSerializer(NotNullSerializer):
     class Meta:
         model = models.Measure
-        fields = '__all__'
+        exclude = ['id']
 
 
 class AggregateSerializer(NotNullSerializer):
+    measure = serializers.SlugRelatedField(slug_field='name', queryset=models.Measure.objects.all(), allow_null=True)
+    cube = serializers.SlugRelatedField(slug_field='name', queryset=models.Cube.objects.all(), write_only=True)
+
     class Meta:
         model = models.Aggregate
-        fields = '__all__'
+        exclude = ['id']
 
 
 class DimensionLevelSerializer(NotNullSerializer):
     class Meta:
         model = models.DimensionLevel
-        fields = '__all__'
+        exclude = ['id']
 
 
 class HierarchyLevelSerializer(NotNullSerializer):
     class Meta:
         model = models.HierarchyLevel
-        fields = '__all__'
+        exclude = ['id']
 
 
 class DimensionAttributeSerializer(NotNullSerializer):
+    dimension = serializers.SlugRelatedField(slug_field='name', queryset=models.Dimension.objects.all(),
+                                             write_only=True)
+
     class Meta:
         model = models.DimensionAttribute
-        fields = '__all__'
+        exclude = ['id']
 
 
 class HierarchyAttributeSerializer(NotNullSerializer):
     class Meta:
         model = models.HierarchyAttribute
-        fields = '__all__'
+        exclude = ['id']
 
 
 class HierarchySerializer(NotNullSerializer):
     levels = serializers.StringRelatedField(many=True, read_only=True)
+    dimension = serializers.SlugRelatedField(slug_field='name', queryset=models.Dimension.objects.all(),
+                                             write_only=True)
 
     class Meta:
         model = models.Hierarchy
-        fields = '__all__'
+        exclude = ['id']
 
 
 class DimensionSerializer(NotNullSerializer):
     levels = serializers.StringRelatedField(many=True, read_only=True)
     hierarchies = HierarchySerializer(many=True, read_only=True)
     attributes = DimensionAttributeSerializer(many=True, read_only=True)
+    model = serializers.SlugRelatedField(slug_field='name', queryset=models.CubesModel.objects.all(), write_only=True)
 
     class Meta:
         model = models.Dimension
-        fields = '__all__'
+        exclude = ['id']
 
 
 class CubeSerializer(NotNullSerializer):
-    dimensions = serializers.SlugRelatedField(slug_field='name',many=True,queryset=models.Dimension.objects.all())
-    measures = serializers.SlugRelatedField(slug_field='name',many=True,queryset=models.Measure.objects.all())
-    aggregates= AggregateSerializer(many=True,read_only=True)
+    dimensions = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Dimension.objects.all())
+    measures = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Measure.objects.all())
+    model = serializers.SlugRelatedField(slug_field='name', queryset=models.CubesModel.objects.all(), write_only=True)
+    aggregates = AggregateSerializer(many=True, read_only=True)
+    mappings = serializers.JSONField(allow_null=True,help_text='对应关系（可选）')
+    joins = serializers.JSONField(allow_null=True, help_text='连接关系（可选）')
 
     class Meta:
         model = models.Cube
-        fields = '__all__'
+        exclude = ['id']
 
 
 class CubesModelSerializer(NotNullSerializer):
     cubes = CubeSerializer(many=True, read_only=True)
     dimensions = DimensionSerializer(many=True, read_only=True)
+    mappings = serializers.JSONField(allow_null=True, help_text='对应关系（可选）')
+    joins = serializers.JSONField(allow_null=True, help_text='连接关系（可选）')
 
     class Meta:
         model = models.CubesModel
-        fields = '__all__'
-
-
+        exclude = ['id']
