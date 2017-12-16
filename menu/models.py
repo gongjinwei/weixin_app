@@ -206,7 +206,7 @@ class DimensionLevel(models.Model):
 
 class HierarchyLevel(models.Model):
     hierarchy = models.ForeignKey('Hierarchy', related_name='levels')
-    name = models.ForeignKey('HierarchyLevel', help_text='名称（必填）')
+    name = models.ForeignKey('DimensionLevel', help_text='名称（必填）',db_column='name')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     key = models.CharField(max_length=50, help_text='key field of the level', null=True)
     label_attribute = models.CharField(max_length=50, help_text='name of attribute containing label to be displayed',
@@ -218,7 +218,9 @@ class HierarchyLevel(models.Model):
     role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
 
     def __str__(self):
-        return self.name
+        levels =DimensionLevel.objects.filter(pk=self.name)
+        if levels.exists():
+            return levels.get(pk=self.name).name
 
 
 class DimensionAttribute(models.Model):
