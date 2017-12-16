@@ -218,9 +218,8 @@ class HierarchyLevel(models.Model):
     role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
 
     def __str__(self):
-        levels =DimensionLevel.objects.filter(pk=self.name)
-        if levels.exists():
-            return levels.get(pk=self.name).name
+
+        return getattr(self.name,'name','')
 
 
 class DimensionAttribute(models.Model):
