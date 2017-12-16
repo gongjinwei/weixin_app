@@ -120,8 +120,8 @@ class CubesModel(models.Model):
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     store = models.CharField(max_length=100,help_text='存储（可选）',null=True)
-    mappings = JSONField()
-    joins = JSONField()
+    mappings = JSONField(null=True,help_text='对应关系')
+    joins = JSONField(null=True,help_text='连接关系')
 
     def __str__(self):
         return self.name
@@ -135,8 +135,8 @@ class Cube(models.Model):
     fact = models.CharField(max_length=100, null=True, help_text='指定数据库表名称，如果不指定，以名称匹配')
     model = models.ForeignKey('CubesModel', related_name='cubes',help_text='选择所属模型')
     dimensions = models.ManyToManyField('Dimension',related_name='cubes')
-    mappings = JSONField()
-    joins = JSONField()
+    mappings = JSONField(null=True, help_text='对应关系')
+    joins = JSONField(null=True, help_text='连接关系')
 
     def __str__(self):
         return self.name
