@@ -2,6 +2,9 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets, filters, status
+import os
+from configparser import ConfigParser
+from rest_framework.renderers import JSONRenderer
 from rest_framework.views import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.decorators import list_route, detail_route
@@ -73,3 +76,28 @@ class DimensionAttributeViewsets(viewsets.ModelViewSet):
 class HierarchyAttributeViewsets(viewsets.ModelViewSet):
     queryset = models.HierarchyAttribute.objects.all()
     serializer_class = serializers.HierarchyAttributeSerializer
+
+
+class SaveToModelFileViewsets(viewsets.ModelViewSet):
+    queryset = models.SaveToModelFile.objects.all()
+    serializer_class = serializers.SaveToModelFileSerializer
+
+    def perform_create(self, serializer):
+        qs = serializer.validated_data['config']
+        path = serializer.validated_data.get('path',r'/home/cks/HJ_Code/cubes_define')
+        configer_path = os.path.join(os.path.abspath(path), 'slicer.ini')
+        if not os.path.isfile(configer_path):
+            raise ValidationError('%s不存在此配置文件'%configer_path)
+        name = qs.name
+        config_serializer = serializers.CubesModelSerializer(qs)
+        js = JSONRenderer().render(config_serializer.data)
+        with open(os.path.join(os.path.join(path,'models'),name+'.json'),'wb') as configjson:
+            configjson.write(js)
+        configer = ConfigParser()
+        configer.read(configer_path)
+        configer.set('models',name,name+'.json')
+        with open(configer_path,'w') as configfile:
+            configer.write(configfile)
+        serializer.save()
+
+

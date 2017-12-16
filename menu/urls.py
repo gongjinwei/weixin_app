@@ -16,5 +16,6 @@ router.register('dimensionLevels',views.DimensionLevelViewsets)
 router.register('hierarchyLevels',views.HierarchyLevelViewsets)
 router.register('dimensionAttributes',views.DimensionAttributeViewsets)
 router.register('hierarchyAttributes',views.HierarchyAttributeViewsets)
+router.register('saveToModelFiles',views.SaveToModelFileViewsets)
 
 urlpatterns = router.urls

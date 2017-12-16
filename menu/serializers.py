@@ -144,3 +144,9 @@ class CubesModelSerializer(NotNullSerializer):
     class Meta:
         model = models.CubesModel
         exclude = ['id']
+
+
+class SaveToModelFileSerializer(NotNullSerializer):
+    class Meta:
+        model = models.SaveToModelFile
+        fields = '__all__'
