@@ -61,35 +61,6 @@ class CubeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TableColumnSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.TableColumn
-        fields = '__all__'
-
-
-class TableSchemaSerializer(serializers.ModelSerializer):
-    column = TableColumnSerializer(many=True,read_only=True)
-
-    class Meta:
-        model = models.TableSchema
-        fields = '__all__'
-
-
-class ModelMappingSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.ModelMapping
-        fields = '__all__'
-
-
-class CubeMappingSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.CubeMapping
-        fields = '__all__'
-
-
 class DimensionLevelSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -118,27 +89,9 @@ class HierarchyAttributeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ModelJoinSerializer(serializers.ModelSerializer):
-    master = TableSchemaSerializer(read_only=True)
-
-    class Meta:
-        model = models.ModelJoin
-        fields = '__all__'
-
-
-class CubeJoinSerializer(serializers.ModelSerializer):
-    master = TableSchemaSerializer(read_only=True)
-
-    class Meta:
-        model = models.CubeJoin
-        fields = '__all__'
-
-
 class CubesModelSerializer(serializers.ModelSerializer):
     cubes = CubeSerializer(many=True,read_only=True)
     dimensions = DimensionSerializer(many=True,read_only=True)
-    mappings = ModelMappingSerializer(many=True,read_only=True)
-    joins = ModelJoinSerializer(many=True,read_only=True)
 
     class Meta:
         model = models.CubesModel

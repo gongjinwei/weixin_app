@@ -120,6 +120,8 @@ class CubesModel(models.Model):
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     store = models.CharField(max_length=100,help_text='存储（可选）',null=True)
+    mappings = JSONField()
+    joins = JSONField()
 
     def __str__(self):
         return self.name
@@ -133,6 +135,8 @@ class Cube(models.Model):
     fact = models.CharField(max_length=100, null=True, help_text='指定数据库表名称，如果不指定，以名称匹配')
     model = models.ForeignKey('CubesModel', related_name='cubes',help_text='选择所属模型')
     dimensions = models.ManyToManyField('Dimension',related_name='cubes')
+    mappings = JSONField()
+    joins = JSONField()
 
     def __str__(self):
         return self.name
@@ -239,75 +243,7 @@ class HierarchyAttribute(models.Model):
         return self.name
 
 
-class CubeJoin(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    cube = models.ForeignKey('Cube', related_name='joins')
-    master = models.ForeignKey('TableSchema', help_text='主表',related_name='cube_master_joins')
-    detail = models.ForeignKey('TableSchema', help_text='细表',related_name='cube_detail_joins')
-    method = models.CharField(help_text='匹配方法', choices=(('match', '内连接'), ('detail', '细外连接'), ('master', '主外连接')),
-                              null=True,max_length=12)
-    alias = models.CharField(help_text='What if you need to join same table twice or more times', null=True, max_length=50)
 
-    def __str__(self):
-        return self.name
-
-
-class ModelJoin(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    cube = models.ForeignKey('CubesModel', related_name='joins')
-    master = models.ForeignKey('TableSchema', help_text='主表', related_name='model_master_joins')
-    detail = models.ForeignKey('TableSchema', help_text='细表', related_name='model_detail_joins')
-    method = models.CharField(help_text='匹配方法', choices=(('match', '内连接'), ('detail', '细外连接'), ('master', '主外连接')),
-                              null=True,max_length=12)
-    alias = models.CharField(help_text='What if you need to join same table twice or more times', null=True, max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
-class CubeMapping(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    cube = models.ForeignKey('Cube', related_name='mappings')
-    schema = models.ForeignKey('TableSchema')
-
-    def __str__(self):
-        return self.name
-
-
-class ModelMapping(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    cube = models.ForeignKey('CubesModel', related_name='mappings')
-    schema = models.ForeignKey('TableSchema')
-
-    def __str__(self):
-        return self.name
-
-
-class DimensionMapping(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    cube = models.ForeignKey('Dimension', related_name='mappings')
-    schema = models.ForeignKey('TableSchema')
-
-    def __str__(self):
-        return self.name
-
-
-class TableColumn(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    master = models.ForeignKey('TableSchema', related_name='column')
-
-    def __str__(self):
-        return self.name
-
-
-class TableSchema(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    type_name = models.CharField(max_length=10, choices=(('master', '主表'), ('detail', '细表')))
-    schema = models.CharField(max_length=255)
-    table = models.CharField(max_length=100, help_text='表名（必填）')
-
-    def __str__(self):
-        return self.name
 
 
 

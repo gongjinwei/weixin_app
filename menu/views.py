@@ -37,26 +37,6 @@ class DimensionViewsets(viewsets.ModelViewSet):
     serializer_class = serializers.DimensionSerializer
 
 
-class ModelMappingViewsets(viewsets.ModelViewSet):
-    queryset = models.ModelMapping.objects.all()
-    serializer_class = serializers.ModelMappingSerializer
-
-
-class ModelJoinViewsets(viewsets.ModelViewSet):
-    queryset = models.ModelJoin.objects.all()
-    serializer_class = serializers.ModelJoinSerializer
-
-
-class TableSchemaViewsets(viewsets.ModelViewSet):
-    queryset = models.TableSchema.objects.all()
-    serializer_class = serializers.TableSchemaSerializer
-
-
-class TableColumnViewsets(viewsets.ModelViewSet):
-    queryset = models.TableColumn.objects.all()
-    serializer_class = serializers.TableColumnSerializer
-
-
 class MeasureViewsets(viewsets.ModelViewSet):
     queryset = models.Measure.objects.all()
     serializer_class = serializers.MeasureSerializer
@@ -85,16 +65,6 @@ class HierarchyLevelViewsets(viewsets.ModelViewSet):
 class DimensionAttributeViewsets(viewsets.ModelViewSet):
     queryset = models.DimensionAttribute.objects.all()
     serializer_class = serializers.DimensionAttributeSerializer
-
-
-class CubeJoinViewsets(viewsets.ModelViewSet):
-    queryset = models.CubeJoin.objects.all()
-    serializer_class = serializers.CubeJoinSerializer
-
-
-class CubeMappingViewsets(viewsets.ModelViewSet):
-    queryset = models.CubeMapping.objects.all()
-    serializer_class = serializers.CubeMappingSerializer
 
 
 class HierarchyAttributeViewsets(viewsets.ModelViewSet):
