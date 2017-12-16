@@ -119,7 +119,7 @@ class CubesModel(models.Model):
     name = models.CharField(max_length=100, help_text='名称（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
-    store = models.CharField(max_length=100,help_text='存储',null=True)
+    store = models.CharField(max_length=100,help_text='存储（可选）',null=True)
 
     def __str__(self):
         return self.name
