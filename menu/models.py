@@ -115,6 +115,201 @@ class Usersmallappreportmenus(models.Model):
         db_table = 'UserSmallAppReportMenus'
 
 
+class CubesModel(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
+    store = models.CharField(max_length=100,help_text='存储',null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Cube(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
+    key = models.CharField(max_length=100, null=True, help_text='主键字段（可选）')
+    fact = models.CharField(max_length=100, null=True, help_text='指定数据库表名称，如果不指定，以名称匹配')
+    model = models.ForeignKey('CubesModel', related_name='cubes',help_text='选择所属模型')
+    dimensions = models.ManyToManyField('Dimension',related_name='cubes')
+
+    def __str__(self):
+        return self.name
+
+
+class Dimension(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
+    model = models.ForeignKey('CubesModel', related_name='dimensions')
+    role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
+    default_hierarchy_name = models.CharField(max_length=100, help_text='默认层（可选）', null=True)
+    alias = models.CharField(max_length=100, help_text='数据库字段名称（可选）', null=True)
+    cardinality = models.CharField(max_length=10, choices=(
+        ('tiny', '0-5'), ('low', '5-50'), ('medium', '>50'), ('high', 'may refuse')), null=True,help_text='维的数量范围（可选）')
+
+    def __str__(self):
+        return self.name
+
+
+class Measure(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    cube = models.ForeignKey('Cube', related_name='measures')
+
+    def __str__(self):
+        return self.name
+
+
+class Aggregate(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    measure = models.ForeignKey('Measure', related_name='aggregates')
+    cube = models.ForeignKey('Cube', related_name='aggregates')
+    function = models.CharField(choices=(('count', '计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大')),
+                                help_text='汇聚方法', max_length=10)
+
+    def __str__(self):
+        return self.name
+
+
+class Hierarchy(models.Model):
+    dimension = models.ForeignKey('Dimension', related_name='hierarchies')
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class DimensionLevel(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    dimension = models.ForeignKey('Dimension', related_name='levels')
+    key = models.CharField(max_length=50, help_text='key field of the level', null=True)
+    label_attribute = models.CharField(max_length=50, help_text='name of attribute containing label to be displayed',
+                                       null=True)
+    order_attribute = models.CharField(max_length=50, help_text='name of attribute that is used for sorting',
+                                       null=True)
+    cardinality = models.CharField(max_length=10, choices=(
+        ('tiny', '0-5'), ('low', '5-50'), ('medium', '>50'), ('high', 'may refuse')), null=True,help_text='级的数量范围（可选）')
+    role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class HierarchyLevel(models.Model):
+    hierarchy = models.ForeignKey('Hierarchy', related_name='levels')
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    key = models.CharField(max_length=50, help_text='key field of the level', null=True)
+    label_attribute = models.CharField(max_length=50, help_text='name of attribute containing label to be displayed',
+                                       null=True)
+    order_attribute = models.CharField(max_length=50, help_text='name of attribute that is used for sorting',
+                                       null=True)
+    cardinality = models.CharField(max_length=10, choices=(
+        ('tiny', '0-5'), ('low', '5-50'), ('medium', '>50'), ('high', 'may refuse')), null=True)
+    role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class DimensionAttribute(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    level = models.ForeignKey('DimensionLevel', related_name='attributes')
+    order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True)
+    missing_value = models.CharField(max_length=100, null=True, help_text='替换空值')
+
+    def __str__(self):
+        return self.name
+
+
+class HierarchyAttribute(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    level = models.ForeignKey('HierarchyLevel', related_name='attributes')
+    order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True)
+    missing_value = models.CharField(max_length=100, null=True, help_text='替换空值')
+
+    def __str__(self):
+        return self.name
+
+
+class CubeJoin(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    cube = models.ForeignKey('Cube', related_name='joins')
+    master = models.ForeignKey('TableSchema', help_text='主表',related_name='cube_master_joins')
+    detail = models.ForeignKey('TableSchema', help_text='细表',related_name='cube_detail_joins')
+    method = models.CharField(help_text='匹配方法', choices=(('match', '内连接'), ('detail', '细外连接'), ('master', '主外连接')),
+                              null=True,max_length=12)
+    alias = models.CharField(help_text='What if you need to join same table twice or more times', null=True, max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class ModelJoin(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    cube = models.ForeignKey('CubesModel', related_name='joins')
+    master = models.ForeignKey('TableSchema', help_text='主表', related_name='model_master_joins')
+    detail = models.ForeignKey('TableSchema', help_text='细表', related_name='model_detail_joins')
+    method = models.CharField(help_text='匹配方法', choices=(('match', '内连接'), ('detail', '细外连接'), ('master', '主外连接')),
+                              null=True,max_length=12)
+    alias = models.CharField(help_text='What if you need to join same table twice or more times', null=True, max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class CubeMapping(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    cube = models.ForeignKey('Cube', related_name='mappings')
+    schema = models.ForeignKey('TableSchema')
+
+    def __str__(self):
+        return self.name
+
+
+class ModelMapping(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    cube = models.ForeignKey('CubesModel', related_name='mappings')
+    schema = models.ForeignKey('TableSchema')
+
+    def __str__(self):
+        return self.name
+
+
+class DimensionMapping(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    cube = models.ForeignKey('Dimension', related_name='mappings')
+    schema = models.ForeignKey('TableSchema')
+
+    def __str__(self):
+        return self.name
+
+
+class TableColumn(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    master = models.ForeignKey('TableSchema', related_name='column')
+
+    def __str__(self):
+        return self.name
+
+
+class TableSchema(models.Model):
+    name = models.CharField(max_length=100, help_text='名称（必填）')
+    type_name = models.CharField(max_length=10, choices=(('master', '主表'), ('detail', '细表')))
+    schema = models.CharField(max_length=255)
+    table = models.CharField(max_length=100, help_text='表名（必填）')
+
+    def __str__(self):
+        return self.name
+
+
 
 
 
