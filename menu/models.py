@@ -224,7 +224,7 @@ class HierarchyLevel(models.Model):
 class DimensionAttribute(models.Model):
     name = models.CharField(max_length=100, help_text='名称（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
-    level = models.ForeignKey('DimensionLevel', related_name='attributes')
+    dimension = models.ForeignKey('Dimension', related_name='attributes')
     order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True)
     missing_value = models.CharField(max_length=100, null=True, help_text='替换空值')
 
