@@ -38,6 +38,9 @@ class DimensionViewsets(viewsets.ModelViewSet):
 
 
 class MeasureViewsets(viewsets.ModelViewSet):
+    """
+        Measures are numerical properties of a fact. They might be represented, for example, as a table column
+    """
     queryset = models.Measure.objects.all()
     serializer_class = serializers.MeasureSerializer
 

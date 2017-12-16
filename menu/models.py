@@ -169,7 +169,7 @@ class Measure(models.Model):
 class Aggregate(models.Model):
     name = models.CharField(max_length=100, help_text='名称（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
-    measure = models.ForeignKey('Measure', related_name='aggregates')
+    measure = models.ForeignKey('Measure', related_name='aggregates',null=True)
     cube = models.ForeignKey('Cube', related_name='aggregates')
     function = models.CharField(choices=(('count', '计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大')),
                                 help_text='汇聚方法', max_length=10)
