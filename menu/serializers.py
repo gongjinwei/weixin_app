@@ -79,6 +79,8 @@ class DimensionLevelSerializer(NotNullSerializer):
 
 
 class HierarchyLevelSerializer(NotNullSerializer):
+    name = serializers.SlugRelatedField(slug_field='name', queryset=models.DimensionLevel.objects.all())
+
     class Meta:
         model = models.HierarchyLevel
         exclude = ['id']
