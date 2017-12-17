@@ -36,6 +36,9 @@ class CubeViewsets(viewsets.ModelViewSet):
 
 
 class CubeJoinViewsets(viewsets.ModelViewSet):
+    """
+        用于建立量表与维表之间的关联，建立关联后，才可以引入维表字段。为常用功能。
+    """
     queryset = models.CubeJoin.objects.all()
     serializer_class = serializers.CubeJoinSerializer
 
@@ -47,7 +50,7 @@ class DimensionViewsets(viewsets.ModelViewSet):
 
 class MeasureViewsets(viewsets.ModelViewSet):
     """
-        Measures are numerical properties of a fact. They might be represented, for example, as a table column
+        度量，是量表的数量属性，常表现为一个表的字段。
     """
     queryset = models.Measure.objects.all()
     serializer_class = serializers.MeasureSerializer
@@ -84,11 +87,17 @@ class HierarchyAttributeViewsets(viewsets.ModelViewSet):
 
 
 class CubeDetailViewsets(viewsets.ModelViewSet):
+    """
+        用于引入立方体中非数量字段，引入后可作为量表的属性使用
+    """
     queryset = models.CubeDetail.objects.all()
     serializer_class = serializers.CubeDetailSerializer
 
 
 class SaveToModelFileViewsets(viewsets.ModelViewSet):
+    """
+        用于保存模型文件及触发服务配置文件更新与重启
+    """
     queryset = models.SaveToModelFile.objects.all()
     serializer_class = serializers.SaveToModelFileSerializer
 

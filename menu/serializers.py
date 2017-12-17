@@ -131,9 +131,11 @@ class DimensionSerializer(NotNullSerializer):
 
 
 class CubeDetailSerializer(NotNullSerializer):
+    cube = serializers.SlugRelatedField(slug_field='name',write_only=True,queryset=models.Cube.objects.all())
+
     class Meta:
         model = models.CubeDetail
-        fields = '__all__'
+        exclude = ['id']
 
 
 class CubeSerializer(NotNullSerializer):

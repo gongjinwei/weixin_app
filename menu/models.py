@@ -259,7 +259,8 @@ class SaveToModelFile(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        self.path = os.path.join(os.path.join(self.path, '_models'), self.config.name + '.json')
+        if not self.path.endswith('.json'):
+            self.path = os.path.join(os.path.join(self.path, '_models'), self.config.name + '.json')
         super().save(force_insert=False, force_update=False, using=None,
                      update_fields=None)
 
