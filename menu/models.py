@@ -125,7 +125,7 @@ class CubesModel(models.Model):
     joins = JSONField(null=True, help_text='连接关系（可选）')
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class Cube(models.Model):
@@ -139,7 +139,7 @@ class Cube(models.Model):
     mappings = JSONField(null=True, help_text='对应关系（可选）')
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class Dimension(models.Model):
@@ -154,7 +154,7 @@ class Dimension(models.Model):
         ('tiny', '0-5'), ('low', '5-50'), ('medium', '>50'), ('high', 'may refuse')), null=True, help_text='维的数量范围（可选）')
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class Measure(models.Model):
@@ -163,7 +163,7 @@ class Measure(models.Model):
     cube = models.ForeignKey('Cube', related_name='measures')
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class Aggregate(models.Model):
@@ -178,7 +178,7 @@ class Aggregate(models.Model):
     expressions = models.CharField(max_length=255, null=True, help_text='计算表达式，如:sum(measure)')
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class Hierarchy(models.Model):
@@ -187,7 +187,7 @@ class Hierarchy(models.Model):
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class DimensionLevel(models.Model):
@@ -232,7 +232,7 @@ class DimensionAttribute(models.Model):
     missing_value = models.CharField(max_length=100, null=True, help_text='替换空值')
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class HierarchyAttribute(models.Model):
@@ -243,7 +243,7 @@ class HierarchyAttribute(models.Model):
     missing_value = models.CharField(max_length=100, null=True, help_text='替换空值')
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class SaveToModelFile(models.Model):
@@ -277,7 +277,7 @@ class CubeJoin(models.Model):
                              max_length=50)
 
     def __str__(self):
-        return '%s:%s' % (self.id, self.name)
+        return self.name
 
 
 class CubeDetail(models.Model):

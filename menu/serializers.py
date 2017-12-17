@@ -60,7 +60,7 @@ class SmallAppMenuStyleSerializer(serializers.ModelSerializer):
 class MeasureSerializer(NotNullSerializer):
     class Meta:
         model = models.Measure
-        exclude = ['id']
+        fields = '__all__'
 
 
 class CubeJoinSerializer(NotNullSerializer):
@@ -68,7 +68,7 @@ class CubeJoinSerializer(NotNullSerializer):
 
     class Meta:
         model = models.CubeJoin
-        exclude = ['id']
+        fields = '__all__'
 
 
 class AggregateSerializer(NotNullSerializer):
@@ -77,13 +77,13 @@ class AggregateSerializer(NotNullSerializer):
 
     class Meta:
         model = models.Aggregate
-        exclude = ['id']
+        fields = '__all__'
 
 
 class DimensionLevelSerializer(NotNullSerializer):
     class Meta:
         model = models.DimensionLevel
-        exclude = ['id']
+        fields = '__all__'
 
 
 class HierarchyLevelSerializer(NotNullSerializer):
@@ -91,7 +91,7 @@ class HierarchyLevelSerializer(NotNullSerializer):
 
     class Meta:
         model = models.HierarchyLevel
-        exclude = ['id']
+        fields = '__all__'
 
 
 class DimensionAttributeSerializer(NotNullSerializer):
@@ -100,13 +100,13 @@ class DimensionAttributeSerializer(NotNullSerializer):
 
     class Meta:
         model = models.DimensionAttribute
-        exclude = ['id']
+        fields = '__all__'
 
 
 class HierarchyAttributeSerializer(NotNullSerializer):
     class Meta:
         model = models.HierarchyAttribute
-        exclude = ['id']
+        fields = '__all__'
 
 
 class HierarchySerializer(NotNullSerializer):
@@ -116,7 +116,7 @@ class HierarchySerializer(NotNullSerializer):
 
     class Meta:
         model = models.Hierarchy
-        exclude = ['id']
+        fields = '__all__'
 
 
 class DimensionSerializer(NotNullSerializer):
@@ -127,7 +127,7 @@ class DimensionSerializer(NotNullSerializer):
 
     class Meta:
         model = models.Dimension
-        exclude = ['id']
+        fields = '__all__'
 
 
 class CubeDetailSerializer(NotNullSerializer):
@@ -135,7 +135,7 @@ class CubeDetailSerializer(NotNullSerializer):
 
     class Meta:
         model = models.CubeDetail
-        exclude = ['id']
+        fields = '__all__'
 
 
 class CubeSerializer(NotNullSerializer):
@@ -149,7 +149,7 @@ class CubeSerializer(NotNullSerializer):
 
     class Meta:
         model = models.Cube
-        exclude = ['id']
+        fields = '__all__'
 
 
 class CubesModelSerializer(NotNullSerializer):
@@ -160,7 +160,7 @@ class CubesModelSerializer(NotNullSerializer):
 
     class Meta:
         model = models.CubesModel
-        exclude = ['id']
+        fields = '__all__'
 
 
 class SaveToModelFileSerializer(NotNullSerializer):
