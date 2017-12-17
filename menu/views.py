@@ -70,12 +70,8 @@ class DimensionLevelViewsets(viewsets.ModelViewSet):
     """
         level用于数据库的GroupBy分组，attribute是维表中不用于GroupBy的属性
         有时level也可以带相关的attribute,例如level month：
-        {
-                 "name":"month",
-                 "key": "month",
-                 "label_attribute": "month_name",
-                 "attributes": ["month", "month_name", "month_sname"]
-        }
+        {"name":"month", "key": "month","label_attribute": "month_name",
+         "attributes": ["month", "month_name", "month_sname"]}
     """
     queryset = models.DimensionLevel.objects.all()
     serializer_class = serializers.DimensionLevelSerializer
@@ -85,12 +81,8 @@ class HierarchyLevelViewsets(viewsets.ModelViewSet):
     """
         level用于数据库的GroupBy分组，Hierarchy是对level的组合，
         有时level也可以带相关的attribute,例如level month：
-        {
-         "name":"month",
-         "key": "month",
-         "label_attribute": "month_name",
-         "attributes": ["month", "month_name", "month_sname"]
-        }
+        {"name":"month", "key": "month","label_attribute": "month_name",
+         "attributes": ["month", "month_name", "month_sname"]}
     """
     queryset = models.HierarchyLevel.objects.all()
     serializer_class = serializers.HierarchyLevelSerializer
