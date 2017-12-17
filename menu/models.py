@@ -249,12 +249,12 @@ class SaveToModelFile(models.Model):
     config = models.ForeignKey('CubesModel', help_text='（必填）选择要保存的配置文件')
     path = models.CharField(max_length=255,
                             help_text='（可选）cube配置文件路径。该路径下必须存在slicer.ini配置文件。配置后，从该路径的_model文件夹中加载json文件。如不了解，不要填写',
-                            default=r'/home/cks/HJ_Code/cubes_define')
+                            default=r'/www/wwwroot/cubes_define')
     create_time = models.DateTimeField(auto_now_add=True, editable=False)
     update_time = models.DateTimeField(auto_now=True, editable=False)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        self.path = os.path.join(self.path, self.config.name + '.json')
+        self.path = os.path.join(os.path.join(self.path, '_models'),self.config.name + '.json')
         super().save(force_insert=False, force_update=False, using=None,
                      update_fields=None)
