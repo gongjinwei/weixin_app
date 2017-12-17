@@ -34,6 +34,7 @@ class CubeViewsets(viewsets.ModelViewSet):
     queryset = models.Cube.objects.all()
     serializer_class = serializers.CubeSerializer
 
+
 class CubeJoinViewsets(viewsets.ModelViewSet):
     queryset = models.CubeJoin.objects.all()
     serializer_class = serializers.CubeJoinSerializer

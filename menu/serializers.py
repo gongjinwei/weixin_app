@@ -64,6 +64,8 @@ class MeasureSerializer(NotNullSerializer):
 
 
 class CubeJoinSerializer(NotNullSerializer):
+    cube = serializers.SlugRelatedField(slug_field='name',write_only=True,queryset=models.Cube.objects.all())
+
     class Meta:
         model = models.CubeJoin
         exclude = ['id']
