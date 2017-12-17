@@ -156,8 +156,8 @@ class CubeSerializer(NotNullSerializer):
 class CubesModelSerializer(NotNullSerializer):
     cubes = CubeSerializer(many=True, read_only=True)
     dimensions = DimensionSerializer(many=True, read_only=True)
-    mappings = serializers.JSONField(allow_null=True, help_text='model级别的对应关系，可被cube的mappings继承（可选）')
-    joins = serializers.JSONField(allow_null=True, help_text='model级别连接关系，可被cube的joins继承（可选）')
+    mappings = serializers.JSONField(allow_null=True, help_text='model级别的对应关系，可被cube的mappings继承，接收json输入（可选）')
+    joins = serializers.JSONField(allow_null=True, help_text='model级别连接关系，可被cube的joins继承，接收json输入（可选）')
 
     class Meta:
         model = models.CubesModel
