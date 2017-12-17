@@ -84,20 +84,22 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         qs = serializer.validated_data['config']
-        path = serializer.validated_data.get('path',r'/home/cks/HJ_Code/cubes_define')
-        configer_path = os.path.join(os.path.abspath(path), 'slicer.ini')
-        if not os.path.isfile(configer_path):
-            raise ValidationError('%s不存在此配置文件'%configer_path)
+        path = serializer.validated_data.get('path', r'/home/cks/HJ_Code/cubes_define')
+        config_path = os.path.join(os.path.abspath(path), 'slicer.ini')
+        if not os.path.isfile(config_path):
+            raise ValidationError('%s不存在此配置文件' % config_path)
         name = qs.name
+        model_path = os.path.join(path, '_models')
+        configer = ConfigParser()
+        if not os.path.exists(model_path):
+            os.makedirs(model_path)
+            configer.set('workspace', 'models_directory', model_path)
         config_serializer = serializers.CubesModelSerializer(qs)
         js = JSONRenderer().render(config_serializer.data)
-        with open(os.path.join(os.path.join(path,'models'),name+'.json'),'wb') as configjson:
-            configjson.write(js)
-        configer = ConfigParser()
-        configer.read(configer_path)
-        configer.set('models',name,name+'.json')
-        with open(configer_path,'w') as configfile:
+        with open(os.path.join(model_path, name + '.json'), 'wb') as config_json:
+            config_json.write(js)
+        configer.read(config_path)
+        configer.set('models', name, name + '.json')
+        with open(config_path, 'w') as configfile:
             configer.write(configfile)
         serializer.save()
-
-

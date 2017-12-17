@@ -117,7 +117,7 @@ class Usersmallappreportmenus(models.Model):
 
 
 class CubesModel(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
+    name = models.CharField(max_length=100, help_text='名称（必填）', unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     store = models.CharField(max_length=100, help_text='存储（可选）', null=True)
@@ -129,7 +129,7 @@ class CubesModel(models.Model):
 
 
 class Cube(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
+    name = models.CharField(max_length=100, help_text='名称（必填）', unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     key = models.CharField(max_length=100, null=True, help_text='主键字段（可选）')
@@ -144,7 +144,7 @@ class Cube(models.Model):
 
 
 class Dimension(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
+    name = models.CharField(max_length=100, help_text='名称（必填）', unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     model = models.ForeignKey('CubesModel', related_name='dimensions')
@@ -246,8 +246,9 @@ class HierarchyAttribute(models.Model):
 
 
 class SaveToModelFile(models.Model):
-    config = models.ForeignKey('CubesModel', help_text='选择要保存的配置文件')
-    path = models.CharField(max_length=255, help_text='cube配置文件路径。路径下必须存在slicer.ini配置文件。如不了解，不要填写',
+    config = models.ForeignKey('CubesModel', help_text='（必填）选择要保存的配置文件')
+    path = models.CharField(max_length=255,
+                            help_text='（可选）cube配置文件路径。该路径下必须存在slicer.ini配置文件。配置后，从该路径的_model文件夹中加载json文件。如不了解，不要填写',
                             default=r'/home/cks/HJ_Code/cubes_define')
     create_time = models.DateTimeField(auto_now_add=True, editable=False)
     update_time = models.DateTimeField(auto_now=True, editable=False)
