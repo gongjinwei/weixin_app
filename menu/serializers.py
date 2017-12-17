@@ -72,7 +72,7 @@ class CubeJoinSerializer(NotNullSerializer):
 
 
 class AggregateSerializer(NotNullSerializer):
-    measure = serializers.SlugRelatedField(slug_field='name', queryset=models.Measure.objects.all(), allow_null=True)
+    measure = serializers.SlugRelatedField(slug_field='name', queryset=models.Measure.objects.all(), allow_null=True,help_text='除普通计数，都必须指定一个measure')
     cube = serializers.SlugRelatedField(slug_field='name', queryset=models.Cube.objects.all(), write_only=True)
 
     class Meta:
@@ -131,7 +131,7 @@ class DimensionSerializer(NotNullSerializer):
 
 
 class CubeDetailSerializer(NotNullSerializer):
-    cube = serializers.SlugRelatedField(slug_field='name',write_only=True,queryset=models.Cube.objects.all())
+    cube = serializers.SlugRelatedField(slug_field='name', write_only=True, queryset=models.Cube.objects.all())
 
     class Meta:
         model = models.CubeDetail
@@ -143,9 +143,10 @@ class CubeSerializer(NotNullSerializer):
     measures = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
     model = serializers.SlugRelatedField(slug_field='name', queryset=models.CubesModel.objects.all(), write_only=True)
     aggregates = AggregateSerializer(many=True, read_only=True)
-    mappings = serializers.JSONField(allow_null=True, help_text='对应关系（可选）')
+    mappings = serializers.JSONField(allow_null=True,
+                                     help_text='所使用属性与物理表属性的对应关系，例如："mappings": {"year":"sales_year","amount":"total_amount"]}（可选）')
     joins = CubeJoinSerializer(many=True, read_only=True)
-    details = CubeDetailSerializer(many=True,read_only=True)
+    details = CubeDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Cube

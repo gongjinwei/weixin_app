@@ -130,26 +130,27 @@ class CubesModel(models.Model):
 
 class Cube(models.Model):
     name = models.CharField(max_length=100, help_text='名称（必填）', unique=True)
+    fact = models.CharField(max_length=100, null=True, help_text='指定数据库表名称，如果不指定，以名称匹配(可选）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
-    key = models.CharField(max_length=100, null=True, help_text='主键字段（可选）')
-    fact = models.CharField(max_length=100, null=True, help_text='指定数据库表名称，如果不指定，以名称匹配')
-    model = models.ForeignKey('CubesModel', related_name='cubes', help_text='选择所属模型')
-    dimensions = models.ManyToManyField('Dimension', related_name='cubes')
-    mappings = JSONField(null=True, help_text='对应关系（可选）')
+    key = models.CharField(max_length=100, null=True, help_text='指定量表主键字段或某一个列名（可选）')
+    model = models.ForeignKey('CubesModel', related_name='cubes', help_text='选择所属模型（必填）')
+    dimensions = models.ManyToManyField('Dimension', related_name='cubes', help_text='选择所用到的维（必填）')
+    mappings = JSONField(null=True,
+                         help_text='所使用属性与物理表属性的对应关系，例如："mappings": {"year":"sales_year","amount":"total_amount"]}（可选）')
 
     def __str__(self):
         return self.name
 
 
 class Dimension(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）', unique=True)
+    name = models.CharField(max_length=100, help_text='名称（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     model = models.ForeignKey('CubesModel', related_name='dimensions')
     role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
     default_hierarchy_name = models.CharField(max_length=100, help_text='默认层（可选）', null=True)
-    alias = models.CharField(max_length=100, help_text='数据库字段名称（可选）', null=True)
+    alias = models.CharField(max_length=100, help_text='别名，当有两个相同名称的维时，用alias给它取别名（可选）', null=True)
     cardinality = models.CharField(max_length=10, choices=(
         ('tiny', '0-5'), ('low', '5-50'), ('medium', '>50'), ('high', 'may refuse')), null=True, help_text='维的数量范围（可选）')
 
@@ -158,7 +159,7 @@ class Dimension(models.Model):
 
 
 class Measure(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
+    name = models.CharField(max_length=100, help_text='维表数据列名,如不使用列名需要用在mappings里建立对应关系（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     cube = models.ForeignKey('Cube', related_name='measures')
 
@@ -167,14 +168,14 @@ class Measure(models.Model):
 
 
 class Aggregate(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
+    name = models.CharField(max_length=100, help_text='名称，将用于聚合的结果显示（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     measure = models.ForeignKey('Measure', related_name='aggregates', null=True)
     cube = models.ForeignKey('Cube', related_name='aggregates')
     function = models.CharField(choices=(
-    ('count', '普通计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大'), ('avg', '求平均'), ('count_nonempty', '计数（非空）'),
-    ('', '计数（不同值）')),
-                                help_text='汇聚方法', max_length=10, null=True)
+        ('count', '普通计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大'), ('avg', '求平均'), ('count_nonempty', '计数（非空）'),
+        ('', '计数（不同值）')),
+        help_text='聚合方法', max_length=10, null=True)
     expressions = models.CharField(max_length=255, null=True, help_text='计算表达式，如:sum(measure)')
 
     def __str__(self):
@@ -228,8 +229,8 @@ class DimensionAttribute(models.Model):
     name = models.CharField(max_length=100, help_text='名称（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     dimension = models.ForeignKey('Dimension', related_name='attributes')
-    order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True)
-    missing_value = models.CharField(max_length=100, null=True, help_text='替换空值')
+    order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True,help_text='排序方式（可选）')
+    missing_value = models.CharField(max_length=100, null=True, help_text='替换空值（可选）')
 
     def __str__(self):
         return self.name
@@ -247,8 +248,8 @@ class HierarchyAttribute(models.Model):
 
 
 class SaveToModelFile(models.Model):
-    name = models.CharField(max_length=100,unique=True,help_text='标识文件名称（必填）')
-    description = models.TextField(help_text='文件描述（可选）',null=True)
+    name = models.CharField(max_length=100, unique=True, help_text='标识文件名称（必填）')
+    description = models.TextField(help_text='文件描述（可选）', null=True)
     config = models.ForeignKey('CubesModel', help_text='（必填）选择要保存的配置文件')
     path = models.CharField(max_length=255,
                             help_text='（可选）cube配置文件路径。该路径下必须存在slicer.ini配置文件。配置后，从该路径的_model文件夹中加载json文件。如不了解，不要填写',
@@ -281,5 +282,6 @@ class CubeJoin(models.Model):
 
 
 class CubeDetail(models.Model):
-    name = models.CharField(max_length=100,help_text='维表非数据列名')
-    cube = models.ForeignKey('Cube',related_name='details')
+    name = models.CharField(max_length=100, help_text='维表非数据列名,如不使用列名需要用在mappings里建立对应关系')
+    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
+    cube = models.ForeignKey('Cube', related_name='details')
