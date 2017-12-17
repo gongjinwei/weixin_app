@@ -83,6 +83,11 @@ class HierarchyAttributeViewsets(viewsets.ModelViewSet):
     serializer_class = serializers.HierarchyAttributeSerializer
 
 
+class CubeDetailViewsets(viewsets.ModelViewSet):
+    queryset = models.CubeDetail.objects.all()
+    serializer_class = serializers.CubeDetailSerializer
+
+
 class SaveToModelFileViewsets(viewsets.ModelViewSet):
     queryset = models.SaveToModelFile.objects.all()
     serializer_class = serializers.SaveToModelFileSerializer

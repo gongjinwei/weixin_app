@@ -247,10 +247,13 @@ class HierarchyAttribute(models.Model):
 
 
 class SaveToModelFile(models.Model):
+    name = models.CharField(max_length=100,unique=True,help_text='标识文件名称（必填）')
+    description = models.TextField(help_text='文件描述（可选）',null=True)
     config = models.ForeignKey('CubesModel', help_text='（必填）选择要保存的配置文件')
     path = models.CharField(max_length=255,
                             help_text='（可选）cube配置文件路径。该路径下必须存在slicer.ini配置文件。配置后，从该路径的_model文件夹中加载json文件。如不了解，不要填写',
                             default=r'/www/wwwroot/cubes_define')
+
     create_time = models.DateTimeField(auto_now_add=True, editable=False)
     update_time = models.DateTimeField(auto_now=True, editable=False)
 
@@ -274,3 +277,8 @@ class CubeJoin(models.Model):
 
     def __str__(self):
         return '%s:%s' % (self.id, self.name)
+
+
+class CubeDetail(models.Model):
+    name = models.CharField(max_length=100,help_text='维表非数据列名')
+    cube = models.ForeignKey('Cube',related_name='details')
