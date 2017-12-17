@@ -96,7 +96,7 @@ class CubeDetailViewsets(viewsets.ModelViewSet):
 
 class SaveToModelFileViewsets(viewsets.ModelViewSet):
     """
-        用于保存模型文件及触发服务配置文件更新与重启
+        用于保存模型文件、触发服务配置文件更新与cube的重启
     """
     queryset = models.SaveToModelFile.objects.all()
     serializer_class = serializers.SaveToModelFileSerializer
