@@ -264,7 +264,7 @@ class CubeJoin(models.Model):
     cube = models.ForeignKey('Cube', related_name='joins')
     master = models.CharField(max_length=100, help_text='主表表达式,一般是量表的某个外键ID,格式：fact_sales.product_id')
     detail = models.CharField(max_length=100, help_text='细表表达式,一般是维表的主键ID，格式：dim_product.key')
-    method = models.CharField(help_text='（可选）匹配方法', choices=(('match', '内连接'), ('detail', '细外连接'), ('master', '主外连接')),
+    method = models.CharField(help_text='（可选）匹配方法', choices=(('match', '内连接（默认）'), ('detail', '细外连接'), ('master', '主外连接')),
                               null=True,max_length=12)
     alias = models.CharField(help_text='（可选）What if you need to join same table twice or more times', null=True, max_length=50)
 
