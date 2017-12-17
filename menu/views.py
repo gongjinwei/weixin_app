@@ -87,7 +87,7 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
         path = serializer.validated_data.get('path', r'/home/cks/HJ_Code/cubes_define')
         config_path = os.path.join(os.path.abspath(path), 'slicer.ini')
         if not os.path.isfile(config_path):
-            raise ValidationError('%s不存在此配置文件' % config_path)
+            raise ValidationError('不存在此配置文件:%s' % config_path)
         name = qs.name
         model_path = os.path.join(path, '_models')
         configer = ConfigParser()
