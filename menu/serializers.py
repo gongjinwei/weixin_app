@@ -63,6 +63,12 @@ class MeasureSerializer(NotNullSerializer):
         exclude = ['id']
 
 
+class CubeJoinSerializer(NotNullSerializer):
+    class Meta:
+        model = models.CubeJoin
+        exclude = ['id']
+
+
 class AggregateSerializer(NotNullSerializer):
     measure = serializers.SlugRelatedField(slug_field='name', queryset=models.Measure.objects.all(), allow_null=True)
     cube = serializers.SlugRelatedField(slug_field='name', queryset=models.Cube.objects.all(), write_only=True)
@@ -128,7 +134,7 @@ class CubeSerializer(NotNullSerializer):
     model = serializers.SlugRelatedField(slug_field='name', queryset=models.CubesModel.objects.all(), write_only=True)
     aggregates = AggregateSerializer(many=True, read_only=True)
     mappings = serializers.JSONField(allow_null=True,help_text='对应关系（可选）')
-    joins = serializers.JSONField(allow_null=True, help_text='连接关系（可选）')
+    joins = CubeJoinSerializer(many=True,read_only=True)
 
     class Meta:
         model = models.Cube

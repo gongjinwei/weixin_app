@@ -34,6 +34,10 @@ class CubeViewsets(viewsets.ModelViewSet):
     queryset = models.Cube.objects.all()
     serializer_class = serializers.CubeSerializer
 
+class CubeJoinViewsets(viewsets.ModelViewSet):
+    queryset = models.CubeJoin.objects.all()
+    serializer_class = serializers.CubeJoinSerializer
+
 
 class DimensionViewsets(viewsets.ModelViewSet):
     queryset = models.Dimension.objects.all()
@@ -95,7 +99,7 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
             os.makedirs(model_path)
             configer.set('workspace', 'models_directory', model_path)
         config_serializer = serializers.CubesModelSerializer(qs)
-        js = JSONRenderer().render(config_serializer.data)
+        js = JSONRenderer().render(config_serializer.data)  # 序列化出所需要的JSON数据
         with open(os.path.join(model_path, name + '.json'), 'wb') as config_json:
             config_json.write(js)
         configer.read(config_path)
@@ -103,3 +107,5 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
         with open(config_path, 'w') as configfile:
             configer.write(configfile)
         serializer.save()
+
+
