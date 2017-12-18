@@ -147,6 +147,20 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
             configer.write(configfile)
         serializer.save()
 
+    def perform_update(self, serializer):
+        qs = serializer.validated_data['config']
+        path = serializer.validated_data['path']
+        config_path = os.path.join(os.path.dirname(os.path.dirname(path)),'slicer.ini')
+        config_serializer = serializers.CubesModelSerializer(qs)
+        js = JSONRenderer().render(config_serializer.data)
+        with open(path, 'wb') as config_json:
+            config_json.write(js)
+        configer = ConfigParser()
+        configer.read(config_path)
+        with open(config_path, 'w') as configfile:
+            configer.write(configfile)
+        serializer.save()
+
     def perform_destroy(self, instance):
         try:
             os.remove(instance.path)
