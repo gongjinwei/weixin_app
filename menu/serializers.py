@@ -85,7 +85,7 @@ class CubeJoinSerializer(NotNullSerializer):
 
 class AggregateSerializer(NotNullSerializer):
     cube = serializers.SlugRelatedField(slug_field='id', queryset=models.Cube.objects.all(), write_only=True)
-    measure = serializers.SlugRelatedField(slug_field='id',queryset=models.Measure.objects.all())
+    measure = serializers.SlugRelatedField(slug_field='id',queryset=models.Measure.objects.all(),allow_null=True)
     present_field_tuple = ('measure','name')
 
     class Meta:
