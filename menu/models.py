@@ -184,7 +184,7 @@ class Aggregate(models.Model):
 
 class Hierarchy(models.Model):
     dimension = models.ForeignKey('Dimension', related_name='hierarchies')
-    name = models.CharField(max_length=100, help_text='名称（必填）')
+    name = models.CharField(max_length=100, help_text='名称（必填）',unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
 
     def __str__(self):
