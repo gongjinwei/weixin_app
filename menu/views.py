@@ -13,9 +13,9 @@ from . import models, serializers
 from django_filters.rest_framework import DjangoFilterBackend
 
 DatabaseFormat = {
-    '1':'mssql+pyodbc://{}?driver=SQL+Server+Native+Client+11.0',
-    '2':'mssql+pymssql://{}',
-    '3':'mysql+mysqldb://{}?charset=utf8'
+    '1': 'mssql+pyodbc://{}?driver=SQL+Server+Native+Client+11.0',
+    '2': 'mssql+pymssql://{}',
+    '3': 'mysql+mysqldb://{}?charset=utf8'
 }
 
 
@@ -150,7 +150,7 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         qs = serializer.validated_data['config']
         path = serializer.validated_data['path']
-        config_path = os.path.join(os.path.dirname(os.path.dirname(path)),'slicer.ini')
+        config_path = os.path.join(os.path.dirname(os.path.dirname(path)), 'slicer.ini')
         config_serializer = serializers.CubesModelSerializer(qs)
         js = JSONRenderer().render(config_serializer.data)
         with open(path, 'wb') as config_json:
@@ -166,12 +166,10 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
             os.remove(instance.path)
         except OSError:
             pass
-        config_path = os.path.join(os.path.dirname(os.path.dirname(instance.path)),'slicer.ini')
+        config_path = os.path.join(os.path.dirname(os.path.dirname(instance.path)), 'slicer.ini')
         config = ConfigParser()
         config.read(config_path)
-        config.remove_option('models',instance.config.name)
-        with open(config_path,'w') as configfile:
+        config.remove_option('models', instance.config.name)
+        with open(config_path, 'w') as configfile:
             config.write(configfile)
         instance.delete()
-
-

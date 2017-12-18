@@ -159,7 +159,7 @@ class Dimension(models.Model):
 
 
 class Measure(models.Model):
-    name = models.CharField(max_length=100, help_text='维表数据列名,如不使用列名需要用在mappings里建立对应关系（必填）')
+    name = models.CharField(max_length=100, help_text='维表数据列名,如不使用列名需要用在mappings里建立对应关系（必填）',unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     cube = models.ForeignKey('Cube', related_name='measures')
 
