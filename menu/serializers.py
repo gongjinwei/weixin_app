@@ -64,7 +64,7 @@ class MeasureSerializer(NotNullSerializer):
 
 
 class CubeJoinSerializer(NotNullSerializer):
-    cube = serializers.SlugRelatedField(slug_field='name', write_only=True, queryset=models.Cube.objects.all())
+    cube = serializers.SlugRelatedField(slug_field='id', write_only=True, queryset=models.Cube.objects.all())
 
     class Meta:
         model = models.CubeJoin
@@ -72,8 +72,7 @@ class CubeJoinSerializer(NotNullSerializer):
 
 
 class AggregateSerializer(NotNullSerializer):
-    measure = serializers.SlugRelatedField(slug_field='name', queryset=models.Measure.objects.all(), allow_null=True,help_text='除普通计数，都必须指定一个measure')
-    cube = serializers.SlugRelatedField(slug_field='name', queryset=models.Cube.objects.all(), write_only=True)
+    cube = serializers.SlugRelatedField(slug_field='id', queryset=models.Cube.objects.all(), write_only=True)
 
     class Meta:
         model = models.Aggregate
@@ -87,7 +86,6 @@ class DimensionLevelSerializer(NotNullSerializer):
 
 
 class HierarchyLevelSerializer(NotNullSerializer):
-    name = serializers.SlugRelatedField(slug_field='name', queryset=models.DimensionLevel.objects.all())
 
     class Meta:
         model = models.HierarchyLevel
@@ -95,7 +93,7 @@ class HierarchyLevelSerializer(NotNullSerializer):
 
 
 class DimensionAttributeSerializer(NotNullSerializer):
-    dimension = serializers.SlugRelatedField(slug_field='name', queryset=models.Dimension.objects.all(),
+    dimension = serializers.SlugRelatedField(slug_field='id', queryset=models.Dimension.objects.all(),
                                              write_only=True)
 
     class Meta:
@@ -111,7 +109,7 @@ class HierarchyAttributeSerializer(NotNullSerializer):
 
 class HierarchySerializer(NotNullSerializer):
     levels = serializers.StringRelatedField(many=True, read_only=True)
-    dimension = serializers.SlugRelatedField(slug_field='name', queryset=models.Dimension.objects.all(),
+    dimension = serializers.SlugRelatedField(slug_field='id', queryset=models.Dimension.objects.all(),
                                              write_only=True)
 
     class Meta:
@@ -120,10 +118,10 @@ class HierarchySerializer(NotNullSerializer):
 
 
 class DimensionSerializer(NotNullSerializer):
-    levels = serializers.StringRelatedField(many=True, read_only=True)
+    levels = serializers.StringRelatedField(many=True)
     hierarchies = HierarchySerializer(many=True, read_only=True)
     attributes = DimensionAttributeSerializer(many=True, read_only=True)
-    model = serializers.SlugRelatedField(slug_field='name', queryset=models.CubesModel.objects.all(), write_only=True)
+    model = serializers.SlugRelatedField(slug_field='id', queryset=models.CubesModel.objects.all(), write_only=True)
 
     class Meta:
         model = models.Dimension
@@ -131,7 +129,7 @@ class DimensionSerializer(NotNullSerializer):
 
 
 class CubeDetailSerializer(NotNullSerializer):
-    cube = serializers.SlugRelatedField(slug_field='name', write_only=True, queryset=models.Cube.objects.all())
+    cube = serializers.SlugRelatedField(slug_field='id', write_only=True, queryset=models.Cube.objects.all())
 
     class Meta:
         model = models.CubeDetail
@@ -140,8 +138,8 @@ class CubeDetailSerializer(NotNullSerializer):
 
 class CubeSerializer(NotNullSerializer):
     dimensions = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Dimension.objects.all())
-    measures = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
-    model = serializers.SlugRelatedField(slug_field='name', queryset=models.CubesModel.objects.all(), write_only=True)
+    measures = serializers.StringRelatedField(many=True)
+    model = serializers.SlugRelatedField(slug_field='id', queryset=models.CubesModel.objects.all(), write_only=True)
     aggregates = AggregateSerializer(many=True, read_only=True)
     mappings = serializers.JSONField(allow_null=True,
                                      help_text='所使用属性与物理表属性的对应关系，例如："mappings": {"year":"sales_year","amount":"total_amount"]}（可选）')

@@ -170,7 +170,7 @@ class Measure(models.Model):
 class Aggregate(models.Model):
     name = models.CharField(max_length=100, help_text='名称，将用于聚合的结果显示（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
-    measure = models.ForeignKey('Measure', related_name='aggregates', null=True)
+    measure = models.CharField(max_length=100, related_name='aggregates', null=True,help_text='除普通计数，都必须指定一个measure')
     cube = models.ForeignKey('Cube', related_name='aggregates')
     function = models.CharField(choices=(
         ('count', '普通计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大'), ('avg', '求平均'), ('count_nonempty', '计数（非空）'),
@@ -210,7 +210,7 @@ class DimensionLevel(models.Model):
 
 class HierarchyLevel(models.Model):
     hierarchy = models.ForeignKey('Hierarchy', related_name='levels')
-    name = models.ForeignKey('DimensionLevel', help_text='名称（必填）', db_column='name')
+    name = models.CharField(max_length=100, help_text='名称，应从dimensionlevel中选择（必填）', db_column='name')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     key = models.CharField(max_length=50, help_text='key field of the level', null=True)
     label_attribute = models.CharField(max_length=50, help_text='name of attribute containing label to be displayed',
@@ -222,7 +222,7 @@ class HierarchyLevel(models.Model):
     role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
 
     def __str__(self):
-        return getattr(self.name, 'name', '')
+        return self.name
 
 
 class DimensionAttribute(models.Model):
