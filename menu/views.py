@@ -12,6 +12,12 @@ from . import models, serializers
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+DatabaseFormat = {
+    '1':'mssql+pyodbc://{}?driver=SQL+Server+Native+Client+11.0',
+    '2':'mssql+pymssql://{}',
+    '3':'mysql+mysqldb://{}?charset=utf8'
+}
+
 
 class UserSmallAppMenusViewsets(viewsets.ModelViewSet):
     queryset = models.UserSmallAppMenus.objects.all()
@@ -140,5 +146,18 @@ class SaveToModelFileViewsets(viewsets.ModelViewSet):
         with open(config_path, 'w') as configfile:
             configer.write(configfile)
         serializer.save()
+
+    def perform_destroy(self, instance):
+        try:
+            os.remove(instance.path)
+        except OSError:
+            pass
+        config_path = os.path.join(os.path.dirname(os.path.dirname(instance.path)),'slicer.ini')
+        config = ConfigParser()
+        config.read(config_path)
+        config.remove_option('models',instance.config.name)
+        with open(config_path,'w') as configfile:
+            config.write(configfile)
+        instance.delete()
 
 

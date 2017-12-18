@@ -144,7 +144,7 @@ class Cube(models.Model):
 
 
 class Dimension(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
+    name = models.CharField(max_length=100, help_text='名称（必填）',unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     model = models.ForeignKey('CubesModel', related_name='dimensions')
@@ -254,6 +254,8 @@ class SaveToModelFile(models.Model):
     path = models.CharField(max_length=255,
                             help_text='（可选）cube配置文件路径。该路径下必须存在slicer.ini配置文件。配置后，从该路径的_model文件夹中加载json文件。如不了解，不要填写',
                             default=r'/www/wwwroot/cubes_define')
+    # database_type = models.CharField(max_length=20,choices=(('1','SQL Server(使用odbc连接)'),('2','SQL Server(使用pymssql)'),('3','MySQL')))
+    # connection_url = models.CharField(max_length=255,help_text='连接字符串，格式：<user>:<password>@<host>[:<port>]/<dbname>')
 
     create_time = models.DateTimeField(auto_now_add=True, editable=False)
     update_time = models.DateTimeField(auto_now=True, editable=False)
