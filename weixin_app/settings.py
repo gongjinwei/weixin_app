@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,11 +36,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'chenxiang',
     'menu',
     'treebeard',
     'django_filters',
-    'django_redis'
+    'django_redis',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'weixin_app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -84,21 +83,20 @@ DATABASES = {
     'cx': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'suppermarket',
-        'USER':'suppermarket',
-        'PASSWORD':'HjCYwbGMBC',
-        'HOST':'122.227.25.118',
-        'PORT':63306
+        'USER': 'suppermarket',
+        'PASSWORD': 'HjCYwbGMBC',
+        'HOST': '122.227.25.118',
+        'PORT': 63306
     },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chengxiang',
-        'USER':'chengxiang',
-        'PASSWORD':'AY7rZyFj3b',
-        'HOST':'122.227.25.118',
-        'PORT':63306
+        'USER': 'chengxiang',
+        'PASSWORD': 'AY7rZyFj3b',
+        'HOST': '122.227.25.118',
+        'PORT': 63306
     },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -118,7 +116,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -132,19 +129,30 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT= os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'static')
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'static')
+
+REST_FRAMEWORK_TOKEN_EXPIRE_MINUTES = 60 * 10
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        # 'rest_framework.permissions.IsAuthenticated',
+        'menu.authentication.ExceptionsIsAuthenticated'
+        # 'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        # 'menu.authentication.CsrfExemptSessionAuthentication',
+        'menu.authentication.ExpiringTokenAuthentication',
+    ),
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
-    'DEFAULT_METADATA_CLASS':'menu.metadata.SimpleMetadata',
-    'max_page_size':50,
+    'DEFAULT_METADATA_CLASS': 'menu.metadata.SimpleMetadata',
+    'max_page_size': 50,
 }
 
 DATABASE_ROUTERS = ['menu.routers.Router']
@@ -159,3 +167,4 @@ CACHES = {
     }
 }
 
+CORS_ORIGIN_ALLOW_ALL = True

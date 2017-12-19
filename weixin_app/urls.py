@@ -16,6 +16,11 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from rest_framework.documentation import include_docs_urls
+from rest_framework.routers import DefaultRouter
+from menu.views import ObtainExpireAuthToken
+
+router = DefaultRouter()
+router.register(r'token',ObtainExpireAuthToken,base_name='token')
 
 extra_pattern=[
     url(r'^supermarket/',include('chenxiang.urls'),name='supermarket')
@@ -23,7 +28,9 @@ extra_pattern=[
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^company/',include(extra_pattern),name='company'),
-    url(r'^menu/',include('menu.urls'),name='menu'),
+    url(r'^api-auth/',include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^company/',include(extra_pattern,namespace='company')),
+    url(r'^menu/',include('menu.urls',namespace='menu')),
     url(r'^docs/',include_docs_urls(title='API Document')),
+    url(r'^open/',include(router.urls,namespace='open'),)
 ]

@@ -1,22 +1,59 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import viewsets, filters, status
-import os
+import os,datetime
 from configparser import ConfigParser
-from rest_framework.renderers import JSONRenderer
-from rest_framework.views import Response
+
+from django.conf import settings
+from rest_framework import viewsets, filters, status
 from rest_framework.serializers import ValidationError
 from rest_framework.decorators import list_route, detail_route
-from . import models, serializers
+
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins
+from rest_framework.views import Response,status
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from . import models, serializers
 DatabaseFormat = {
     '1': 'mssql+pyodbc://{}?driver=SQL+Server+Native+Client+11.0',
     '2': 'mssql+pymssql://{}',
     '3': 'mysql+mysqldb://{}?charset=utf8'
 }
+
+class CreateOnlyViewSet(mixins.CreateModelMixin, GenericViewSet):
+    """
+    A viewset that provides default `create()` actions.
+    """
+    pass
+
+
+class ObtainExpireAuthToken(ObtainAuthToken, CreateOnlyViewSet):
+    """"
+        输入用户名和密码来获取Token,请求头带上Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b
+    """
+
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.validated_data['user']
+            token, created = Token.objects.get_or_create(user=user)
+            time_now = datetime.datetime.now()
+            EXPIRE_MINUTES = getattr(settings, 'REST_FRAMEWORK_TOKEN_EXPIRE_MINUTES', 1)
+            if created or token.created < time_now - datetime.timedelta(minutes=EXPIRE_MINUTES):
+                token.delete()
+                token = Token.objects.create(user=user)
+                token.created = time_now
+                token.save()
+            return Response({'token': token.key})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserSmallAppMenusViewsets(viewsets.ModelViewSet):
