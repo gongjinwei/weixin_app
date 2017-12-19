@@ -22,7 +22,7 @@ class NotNullSerializer(serializers.ModelSerializer):
                 self.present_field_tuple) == 2, 'present_field_tuples must be a two elements tuple'
             present_field_name, to_present_name = self.present_field_tuple
         else:
-            present_field_name=to_present_name=None
+            present_field_name = to_present_name = None
 
         for field in fields:
             try:
@@ -38,9 +38,9 @@ class NotNullSerializer(serializers.ModelSerializer):
             check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
             if check_for_none is not None:
                 if present_field_name:
-                    if field.field_name==present_field_name:
-                        if isinstance(attribute,Iterable):
-                            ret[field.field_name] = [getattr(value,to_present_name,'') for value in attribute]
+                    if field.field_name == present_field_name:
+                        if isinstance(attribute, Iterable):
+                            ret[field.field_name] = [getattr(value, to_present_name, '') for value in attribute]
                         else:
                             ret[field.field_name] = getattr(attribute, to_present_name, '')
                         continue
@@ -88,46 +88,37 @@ class CubeJoinSerializer(NotNullSerializer):
 
 class AggregateSerializer(NotNullSerializer):
     cube = serializers.SlugRelatedField(slug_field='id', queryset=models.Cube.objects.all(), write_only=True)
-    measure = serializers.SlugRelatedField(slug_field='id',queryset=models.Measure.objects.all(),allow_null=True)
-    present_field_tuple = ('measure','name')
+    measure = serializers.SlugRelatedField(slug_field='id', queryset=models.Measure.objects.all(), allow_null=True)
+    present_field_tuple = ('measure', 'name')
 
     class Meta:
         model = models.Aggregate
         fields = '__all__'
 
 
-class DimensionLevelSerializer(NotNullSerializer):
+class AttributeSerializer(NotNullSerializer):
+    dimension = serializers.SlugRelatedField(slug_field='id',queryset=models.Dimension.objects.all(),write_only=True)
+    hierarchy = serializers.SlugRelatedField(slug_field='id',queryset=models.Hierarchy.objects.all(),write_only=True,allow_null=True)
+    level = serializers.SlugRelatedField(slug_field='id',queryset=models.Level.objects.all(),write_only=True,allow_null=True)
+
     class Meta:
-        model = models.DimensionLevel
+        model = models.Attribute
         fields = '__all__'
 
 
-class HierarchyLevelSerializer(NotNullSerializer):
-    name = serializers.SlugRelatedField(slug_field='id',queryset=models.DimensionLevel.objects.all())
-    present_field_tuple = ('name','name')
+class LevelSerializer(NotNullSerializer):
+    dimension = serializers.SlugRelatedField(slug_field='id',queryset=models.Dimension.objects.all(),write_only=True)
+    hierarchy = serializers.SlugRelatedField(slug_field='id',queryset=models.Hierarchy.objects.all(),write_only=True,allow_null=True)
+    attributes = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = models.HierarchyLevel
-        fields = '__all__'
-
-
-class DimensionAttributeSerializer(NotNullSerializer):
-    dimension = serializers.SlugRelatedField(slug_field='id', queryset=models.Dimension.objects.all(),
-                                             write_only=True)
-
-    class Meta:
-        model = models.DimensionAttribute
-        fields = '__all__'
-
-
-class HierarchyAttributeSerializer(NotNullSerializer):
-    class Meta:
-        model = models.HierarchyAttribute
+        model = models.Level
         fields = '__all__'
 
 
 class HierarchySerializer(NotNullSerializer):
     levels = serializers.StringRelatedField(many=True, read_only=True)
+    attributes = serializers.StringRelatedField(many=True, read_only=True)
     dimension = serializers.SlugRelatedField(slug_field='id', queryset=models.Dimension.objects.all(),
                                              write_only=True)
 
@@ -139,7 +130,7 @@ class HierarchySerializer(NotNullSerializer):
 class DimensionSerializer(NotNullSerializer):
     levels = serializers.StringRelatedField(many=True, read_only=True)
     hierarchies = HierarchySerializer(many=True, read_only=True)
-    attributes = DimensionAttributeSerializer(many=True, read_only=True)
+    attributes = AttributeSerializer(many=True, read_only=True)
     model = serializers.SlugRelatedField(slug_field='id', queryset=models.CubesModel.objects.all(), write_only=True)
 
     class Meta:
@@ -176,7 +167,6 @@ class CubesModelSerializer(NotNullSerializer):
     dimensions = DimensionSerializer(many=True, read_only=True)
     mappings = serializers.JSONField(allow_null=True, help_text='model级别的对应关系，可被cube的mappings继承，接收json输入（可选）')
     joins = serializers.JSONField(allow_null=True, help_text='model级别连接关系，可被cube的joins继承，接收json输入（可选）')
-
 
     class Meta:
         model = models.CubesModel

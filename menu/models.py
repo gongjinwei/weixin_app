@@ -144,7 +144,7 @@ class Cube(models.Model):
 
 
 class Dimension(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）',unique=True)
+    name = models.CharField(max_length=100, help_text='名称（必填）', unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     description = models.CharField(max_length=255, help_text='描述（可选）', null=True)
     model = models.ForeignKey('CubesModel', related_name='dimensions')
@@ -170,7 +170,7 @@ class Measure(models.Model):
 class Aggregate(models.Model):
     name = models.CharField(max_length=100, help_text='名称，将用于聚合的结果显示（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
-    measure = models.ForeignKey('Measure', related_name='aggregates', null=True,help_text='除普通计数，都必须指定一个measure')
+    measure = models.ForeignKey('Measure', related_name='aggregates', null=True, help_text='除普通计数，都必须指定一个measure')
     cube = models.ForeignKey('Cube', related_name='aggregates')
     function = models.CharField(choices=(
         ('count', '普通计数'), ('sum', '求和'), ('min', '最小'), ('max', '最大'), ('avg', '求平均'), ('count_nonempty', '计数（非空）'),
@@ -184,17 +184,18 @@ class Aggregate(models.Model):
 
 class Hierarchy(models.Model):
     dimension = models.ForeignKey('Dimension', related_name='hierarchies')
-    name = models.CharField(max_length=100, help_text='名称（必填）',unique=True)
+    name = models.CharField(max_length=100, help_text='名称（必填）', unique=True)
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
 
     def __str__(self):
-        return getattr(self.name,'name','')
+        return getattr(self.name, 'name', '')
 
 
-class DimensionLevel(models.Model):
+class Level(models.Model):
     name = models.CharField(max_length=100, help_text='名称（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     dimension = models.ForeignKey('Dimension', related_name='levels')
+    hierarchy = models.ForeignKey('Hierarchy', null=True, related_name='levels')
     key = models.CharField(max_length=50, help_text='key field of the level', null=True)
     label_attribute = models.CharField(max_length=50, help_text='name of attribute containing label to be displayed',
                                        null=True)
@@ -208,40 +209,14 @@ class DimensionLevel(models.Model):
         return self.name
 
 
-class HierarchyLevel(models.Model):
-    hierarchy = models.ForeignKey('Hierarchy', related_name='levels')
-    name = models.ForeignKey('DimensionLevel', help_text='名称（必填）', db_column='name')
-    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
-    key = models.CharField(max_length=50, help_text='key field of the level', null=True)
-    label_attribute = models.CharField(max_length=50, help_text='name of attribute containing label to be displayed',
-                                       null=True)
-    order_attribute = models.CharField(max_length=50, help_text='name of attribute that is used for sorting',
-                                       null=True)
-    cardinality = models.CharField(max_length=10, choices=(
-        ('tiny', '0-5'), ('low', '5-50'), ('medium', '>50'), ('high', 'may refuse')), null=True)
-    role = models.CharField(max_length=10, help_text='角色（可选）', null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class DimensionAttribute(models.Model):
+class Attribute(models.Model):
     name = models.CharField(max_length=100, help_text='名称（必填）')
     label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
     dimension = models.ForeignKey('Dimension', related_name='attributes')
-    order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True,help_text='排序方式（可选）')
+    hierarchy = models.ForeignKey('Hierarchy', related_name='attributes',null=True)
+    level = models.ForeignKey('Level',related_name='attributes',null=True)
+    order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True, help_text='排序方式（可选）')
     missing_value = models.CharField(max_length=100, null=True, help_text='替换空值（可选）')
-
-    def __str__(self):
-        return self.name
-
-
-class HierarchyAttribute(models.Model):
-    name = models.CharField(max_length=100, help_text='名称（必填）')
-    label = models.CharField(max_length=100, help_text='标签（可选）', null=True)
-    level = models.ForeignKey('HierarchyLevel', related_name='attributes')
-    order = models.CharField(max_length=5, choices=(('asc', '升序'), ('desc', '降序')), null=True)
-    missing_value = models.CharField(max_length=100, null=True, help_text='替换空值')
 
     def __str__(self):
         return self.name

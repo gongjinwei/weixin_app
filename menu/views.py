@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-import os,datetime
+import os, datetime
 from configparser import ConfigParser
 
 from django.conf import settings
@@ -14,16 +14,18 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
-from rest_framework.views import Response,status
+from rest_framework.views import Response, status
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from . import models, serializers
+
 DatabaseFormat = {
     '1': 'mssql+pyodbc://{}?driver=SQL+Server+Native+Client+11.0',
     '2': 'mssql+pymssql://{}',
     '3': 'mysql+mysqldb://{}?charset=utf8'
 }
+
 
 class CreateOnlyViewSet(mixins.CreateModelMixin, GenericViewSet):
     """
@@ -109,42 +111,14 @@ class HierarchyViewsets(viewsets.ModelViewSet):
     serializer_class = serializers.HierarchySerializer
 
 
-class DimensionLevelViewsets(viewsets.ModelViewSet):
-    """
-        level用于数据库的GroupBy分组，attribute是维表中不用于GroupBy的属性
-        有时level也可以带相关的attribute,例如level month：
-        {"name":"month", "key": "month","label_attribute": "month_name",
-         "attributes": ["month", "month_name", "month_sname"]}
-    """
-    queryset = models.DimensionLevel.objects.all()
-    serializer_class = serializers.DimensionLevelSerializer
+class LevelViewsets(viewsets.ModelViewSet):
+    queryset = models.Level.objects.all()
+    serializer_class = serializers.LevelSerializer
 
 
-class HierarchyLevelViewsets(viewsets.ModelViewSet):
-    """
-        level用于数据库的GroupBy分组，Hierarchy是对level的组合，
-        有时level也可以带相关的attribute,例如level month：
-        {"name":"month", "key": "month","label_attribute": "month_name",
-         "attributes": ["month", "month_name", "month_sname"]}
-    """
-    queryset = models.HierarchyLevel.objects.all()
-    serializer_class = serializers.HierarchyLevelSerializer
-
-
-class DimensionAttributeViewsets(viewsets.ModelViewSet):
-    """
-        attribute是维表中不用于GroupBy的属性，使用default_hierarchy
-    """
-    queryset = models.DimensionAttribute.objects.all()
-    serializer_class = serializers.DimensionAttributeSerializer
-
-
-class HierarchyAttributeViewsets(viewsets.ModelViewSet):
-    """
-        level用于数据库的GroupBy分组，attribute是维表中不用于GroupBy的属性
-    """
-    queryset = models.HierarchyAttribute.objects.all()
-    serializer_class = serializers.HierarchyAttributeSerializer
+class AttributeViewsets(viewsets.ModelViewSet):
+    queryset = models.Attribute.objects.all()
+    serializer_class = serializers.AttributeSerializer
 
 
 class CubeDetailViewsets(viewsets.ModelViewSet):
