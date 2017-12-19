@@ -39,7 +39,10 @@ class NotNullSerializer(serializers.ModelSerializer):
             if check_for_none is not None:
                 if present_field_name:
                     if field.field_name==present_field_name:
-                        ret[field.field_name] = [getattr(value,to_present_name,'') for value in attribute]
+                        if isinstance(attribute,Iterable):
+                            ret[field.field_name] = [getattr(value,to_present_name,'') for value in attribute]
+                        else:
+                            ret[field.field_name] = getattr(attribute, to_present_name, '')
                         continue
                 attr = field.to_representation(attribute)
                 if attr:
