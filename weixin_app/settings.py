@@ -140,13 +140,17 @@ REST_FRAMEWORK_TOKEN_EXPIRE_MINUTES = 60 * 10
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.IsAuthenticated',
-        'menu.authentication.ExceptionsIsAuthenticated'
+        'menu.authentication.ExceptionsIsAuthenticated',
         # 'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         # 'menu.authentication.CsrfExemptSessionAuthentication',
         'menu.authentication.ExpiringTokenAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'menu.renders.APIRenderer',
     ),
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
