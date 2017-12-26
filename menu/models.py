@@ -21,10 +21,10 @@ class UserSmallAppMenus(AL_Node):
     company_api_name = models.CharField(max_length=50)
     user_id = models.IntegerField()
     style = models.ForeignKey('SmallAppMenuStyle')
-    title = models.CharField(max_length=20)
-    subtitle = models.CharField(max_length=50)
-    value = models.CharField(max_length=50)
-    subvalue = models.CharField(max_length=50)
+    title = models.CharField(max_length=20,null=True)
+    subtitle = models.CharField(max_length=50,null=True)
+    value = models.CharField(max_length=50,null=True)
+    subvalue = models.CharField(max_length=50,null=True)
     image = models.CharField(max_length=100)
     icon = models.CharField(max_length=20)
     icon_background = models.CharField(max_length=6)
@@ -39,9 +39,9 @@ class UserSmallAppMenus(AL_Node):
                                null=True,
                                db_index=True)
     sib_order = models.PositiveIntegerField()
-    value_formula = models.CharField(max_length=100)
-    subvalue_formula = models.CharField(max_length=100)
-    subtitle_formula = models.CharField(max_length=100)
+    value_formula = models.CharField(max_length=100,null=True)
+    subvalue_formula = models.CharField(max_length=100,null=True)
+    subtitle_formula = models.CharField(max_length=100,null=True)
 
     class Meta:
         managed = False

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_redis',
     'corsheaders',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -60,8 +61,7 @@ ROOT_URLCONF = 'weixin_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -172,3 +172,17 @@ CACHES = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+CELERY_BROKER_URL = 'redis://localhost/0'
+CELERY_RESULT_BACKEND = 'redis://localhost'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYD_MAX_TASKS_PER_CHILD = 100
+
+BROKER_URL = 'redis://localhost/0'
+BACKEND_URL = 'redis://localhost'
+
+import djcelery
+
+djcelery.setup_loader()
+
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
