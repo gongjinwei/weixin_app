@@ -5,7 +5,7 @@ from jsonfield import JSONField
 
 
 class Create(models.Model):
-    id = models.CharField(primary_key=True,help_text='主键',max_length=42)
+    id = models.CharField(primary_key=True,help_text='主键',max_length=42,editable=False)
     version = models.IntegerField(help_text='当前版本号',default=0,editable=False)
     last_version = models.IntegerField(help_text='上一次的版本号,新建的版本号为-1')
     last_state = models.CharField(max_length=50,help_text='上一次更新状态')

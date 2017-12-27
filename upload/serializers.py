@@ -10,3 +10,10 @@ class CreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Create
         fields = '__all__'
+
+
+class DeleteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Create
+        fields = ['dept_no','database_name','table_name','key_str']

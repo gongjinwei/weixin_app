@@ -187,3 +187,6 @@ import djcelery
 djcelery.setup_loader()
 
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+# KAZOO_CLIENTS='192.168.31.71:2181,192.168.31.72:2181,192.168.31.73:2181'
+KAZOO_CLIENTS='122.227.25.118:52181'
