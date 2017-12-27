@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^api-auth/',include('rest_framework.urls', namespace='rest_framework')),
     url(r'^company/',include(extra_pattern,namespace='company')),
     url(r'^menu/',include('menu.urls',namespace='menu')),
+    url(r'^upload/',include('upload.urls',namespace='upload')),
     url(r'^docs/',include_docs_urls(title='API Document')),
     url(r'^open/',include(router.urls,namespace='open'),)
 ]

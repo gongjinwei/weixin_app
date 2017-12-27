@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_redis',
     'corsheaders',
     'djcelery',
+    'upload',
 ]
 
 MIDDLEWARE = [

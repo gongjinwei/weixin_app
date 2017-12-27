@@ -52,4 +52,3 @@ def get_latest_record(dirs):
                 continue
 
 
-get_latest_record(dir(models))
