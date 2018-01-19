@@ -141,8 +141,8 @@ REST_FRAMEWORK_TOKEN_EXPIRE_MINUTES = 60 * 10
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.IsAuthenticated',
-        'menu.authentication.ExceptionsIsAuthenticated',
-        # 'rest_framework.permissions.AllowAny',
+        # 'menu.authentication.ExceptionsIsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
