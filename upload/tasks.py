@@ -1,5 +1,8 @@
 # -*- coding:UTF-8 -*-
 import celery
 
-from kazoo.client import KazooClient
+
+@celery.task
+def commit_save():
+    pass
 
